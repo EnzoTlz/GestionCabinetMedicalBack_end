@@ -16,22 +16,6 @@ class Usager
     public function __construct(){
         $this->dbconfig = DbConfig::getDbConfig();
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++AFFICHAGE ALL MEDECIN+++++++++++++++++++++++++++++++++++++++++++++++
-
-    public function PrintAllMedecin(){
-        try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM medecin');
-            $req->execute();
-            $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    
-            $output = '';
-            foreach ($result as $medecin) {
-                $output .= '<option value="' . $medecin['Id_Medecin'] . '">' . $medecin['prenom'] . ' ' . $medecin['nom'] . '</option>';
-            }
-    
-            return $output;
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
     
     
     //+++++++++++++++++++++++++++++++++++++++++++++++++++AJOUT USER+++++++++++++++++++++++++++++++++++++++++++++++

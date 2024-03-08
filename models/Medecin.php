@@ -143,6 +143,22 @@ function SearchMedecin($context){
     }
     
 
+
+    public function getAllMedecin(){
+        try {
+            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM medecin');
+            $req->execute();
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+    
+            $output = '';
+            foreach ($result as $medecin) {
+                $output .= '<option value="' . $medecin['Id_Medecin'] . '">' . $medecin['prenom'] . ' ' . $medecin['nom'] . '</option>';
+            }
+    
+            return $output;
+        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
+    }
+    
 //+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setNom($nom){
         $this->nom = $nom;

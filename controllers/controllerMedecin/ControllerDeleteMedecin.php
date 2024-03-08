@@ -22,8 +22,7 @@
 
     try{
 
-        checkInputToDeleteMedecin($data); // revoir
-        $medecin = getMedecinIDByNameAndFristName($data['nom'],$data['prenom']);
+        checkInputToDeleteMedecin($data);
         $medecin = setDeleteMedecinCommand($data);
         $medecin->DeleteMedecin();
         echo json_encode(array("status" => "success", "message" => "Medecin ajoute avec succes.", "status_code" => http_response_code(200)));
