@@ -7,6 +7,7 @@ function checkInputToAddMedecin($data) {
     if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom'])) {
         http_response_code(400);
         echo json_encode(array("status" => "error", "message" => "Tous les champs sont obligatoires."));
+        
         exit;
     }
 }
@@ -20,15 +21,15 @@ function setCommandToAddMedecin($data) {
     return $medecin;
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
 
 try {
+    $data = json_decode(file_get_contents("php://input"), true);
     checkInputToAddMedecin($data);
     $medecin = setCommandToAddMedecin($data);
     $medecin->AddMedecin();
+    $medecin->deliver_response(200, "Succès : Médecin bien ajoutée .", $data);
 
-    echo json_encode(array("status" => "success", "message" => "Medecin ajoute avec succes.", "status_code" => http_response_code(200)));
 } catch (Exception $e) {
-    echo json_encode(array("status" => "error", "message" => "Une erreur c est produite : " , "status_code" => http_response_code(500) , $e->getMessage()));
+    $medecin->deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
 }
 ?>

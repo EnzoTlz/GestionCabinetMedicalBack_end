@@ -149,15 +149,39 @@ function SearchMedecin($context){
             $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM medecin');
             $req->execute();
             $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    
-            $output = '';
-            foreach ($result as $medecin) {
-                $output .= '<option value="' . $medecin['Id_Medecin'] . '">' . $medecin['prenom'] . ' ' . $medecin['nom'] . '</option>';
-            }
-    
-            return $output;
+            return $result;
+            
         } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
     }
+    
+    public function getMedecinById(){
+        try {    
+            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM medecin WHERE Id_Medecin = :id');
+            $req->execute([':id' => $this->getId()]);
+            $result = $req->fetch(PDO::FETCH_ASSOC);
+            // var_dump($result);
+            return $result;
+        } catch(Exception $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+        }
+    }
+
+
+
+
+    function deliver_response($status_code, $status_message, $data){
+
+        http_response_code($status_code);
+        header("Content-Type:application/json; charset=utf-8");
+        $response['status_code'] = $status_code;
+        $response['status_message'] = $status_message;
+        $response['data'] = $data;
+        $json_response = json_encode($response);
+        if($json_response===false)
+            die('json encode ERROR : '.json_last_error_msg());
+        echo $json_response;
+    }
+
     
 //+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setNom($nom){
