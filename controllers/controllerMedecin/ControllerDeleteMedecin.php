@@ -1,34 +1,40 @@
 <?php
-    require_once '../../models/DbConfig.php';
-    require_once '../../models/Medecin.php';
+    require_once("../../models/Medecin.php");
 
-    $data = json_decode(file_get_contents("php://input"), true);
-    $medecin = new Medecin();
 
-    function checkInputToDeleteMedecin($data) {
-        if (!isset($data['nom']) || !isset($data['prenom'])) {
+    function checkInputToDeleteMedecin() {
+        if (!isset($_GET['id'])) {
             http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Tous les champs sont obligatoires."));
+            echo json_encode(array("status" => "error", "message" => "Id non renseigné."));
+            
             exit;
         }
     }
-    function setCommandToAddMedecin($data) {
-        $medecin->setPrenom($data['prenom']);
-        $medecin->setNom($data['nom']);
-        $medecin->setCivilite($data['civilite']);
+    function setDeleteMedecinCommand() {
+        $idMedecin = $_GET['id'];
+
+        $medecin = new Medecin();
+        $medecin->setId($idMedecin);
+        $medecinExistant = $medecin->getMedecinById(); //recupere le medecin avec l'id
+        if($medecinExistant === false){
+            $medecin->deliver_response(400, "Echec : Id du médecin introuvable .", $_GET['id']);
+            return false;
+        }else{
     
-        return $medecin;
+            $medecin->setId($idMedecin);
+            return $medecin;
+        }
     }
 
     try{
-
-        checkInputToDeleteMedecin($data);
-        $medecin = setDeleteMedecinCommand($data);
-        $medecin->DeleteMedecin();
-        echo json_encode(array("status" => "success", "message" => "Medecin ajoute avec succes.", "status_code" => http_response_code(200)));
-
+        checkInputToDeleteMedecin();
+        $medecin = setDeleteMedecinCommand();
+        if ($medecin != false){
+            $medecin->DeleteMedecin();
+            $medecin->deliver_response(200, "Succès : Médecin bien supprimé .", $_GET);
+        }
     } catch (Exception $e) {
-        echo json_encode(array("status" => "error", "message" => "Une erreur c est produite : " , "status_code" => http_response_code(500) , $e->getMessage()));
+        $medecin->deliver_response(500, "Echec : Médecin non modifié .", $e->getMessage());
     }
 
 ?>

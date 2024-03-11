@@ -1,6 +1,5 @@
 <?php
 
-require_once '../../models/DbConfig.php';
 require_once '../../models/Medecin.php';
 
 function checkInputToAddMedecin($data) {

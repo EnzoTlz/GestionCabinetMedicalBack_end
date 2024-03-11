@@ -160,8 +160,8 @@ class Usager
     }
 
 
-
-    public function getInformationByID($Id_Usager){
+    // GET USAGER BY ID
+    public function getUsagerByID($Id_Usager){
         try {
             $req = $this->dbconfig->getPDO()->prepare('SELECT nom, prenom , numero_securite_social FROM usager WHERE Id_Usager = :IdUsager');
             $req->bindValue(':IdUsager', $Id_Usager, PDO::PARAM_INT);
@@ -189,7 +189,31 @@ class Usager
 
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
+    //UTILISER POUR GETALL
+    public function getAllUsager(){
+        try {
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager');
+            $req->execute();
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+            
+        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
+    }
 
+
+
+    function deliver_response($status_code, $status_message, $data){
+
+        http_response_code($status_code);
+        header("Content-Type:application/json; charset=utf-8");
+        $response['status_code'] = $status_code;
+        $response['status_message'] = $status_message;
+        $response['data'] = $data;
+        $json_response = json_encode($response);
+        if($json_response===false)
+            die('json encode ERROR : '.json_last_error_msg());
+        echo $json_response;
+    }
     //+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setId($Id_Usager){
         $this->Id_Usager = $Id_Usager;

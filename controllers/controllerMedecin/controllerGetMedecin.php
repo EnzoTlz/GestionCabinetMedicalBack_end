@@ -2,16 +2,16 @@
 
     require_once("../../models/Medecin.php");
 
-    function checkInputToModifyMedecin($data) {
+    function checkInputToGetMedecin() {
         if (!isset($_GET['id'])) {
             http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Tous les champs sont obligatoires."));
+            echo json_encode(array("status" => "error", "message" => "id non trouvé."));
             
             exit;
         }
     }
 
-    function setCommandToAddMedecin($id) {
+    function setCommandToGetMedecin($id) {
         $medecin = new Medecin();
         $medecin->setId($id);
 
@@ -19,8 +19,8 @@
     }
 
     try {
-        checkInputToModifyMedecin($_GET['id']);
-        $medecin = setCommandToAddMedecin($_GET['id']);
+        checkInputToGetMedecin();
+        $medecin = setCommandToGetMedecin($_GET['id']);
         $medecinById = $medecin->getMedecinById();
         if(!$medecinById){
             $medecin->deliver_response(500, "Echec : Médecin non trouvé .", false);
