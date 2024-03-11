@@ -23,13 +23,13 @@
         $usager = setCommandToGetUsager($_GET['id']);
         $usagerById = $usager->getUsagerByID($_GET['id']);
         if(!$usagerById){
-            $usager->deliver_response(500, "Echec : Médecin non trouvé .", false);
+            $usager->deliver_response(500, "Echec : usager non trouvé .", false);
         }else{
-            $usager->deliver_response(200, "Succès : Médecin bien trouvé .", $usagerById);
+            $usager->deliver_response(200, "Succès : usager bien trouvé .", $usagerById);
         }
 
     } catch (Exception $e) {
-        $medecin->deliver_response(500, "Echec : Médecin non trouvé .", $e->getMessage());
+        $medecin->deliver_response(500, "Echec : usager non trouvé .", $e->getMessage());
     }
 
 

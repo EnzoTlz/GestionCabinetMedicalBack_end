@@ -1,26 +1,40 @@
 <?php
-    require_once '../Objects/DbConfig.php';
-    require_once '../Objects/Usager.php';
+    require_once("../../models/Usager.php");
 
-    checkInputToDelete($_POST);
-    $commandToDelete = setCommandDeleteUser($_POST);
-    $commandToDelete->DeleteUser();
-    header('Location: ../../front_end/Usagers.php?success=3');
 
-    function checkInputToDelete($POST){
-        if (!isset($POST['user_id'])) {
-            exceptions_error_handler('user_id null');
+    function checkInputToDeleteUsager() {
+        if (!isset($_GET['id'])) {
+            http_response_code(400);
+            echo json_encode(array("status" => "error", "message" => "Id non renseigné."));
+            
+            exit;
+        }
+    }
+    function setDeleteUsagerCommand() {
+        $idUsager = $_GET['id'];
+
+        $usager = new Usager();
+        $usager->setId($idUsager);
+        $usagerExistant = $usager->getUsagerByID($idUsager); //recupere le medecin avec l'id
+        if($usagerExistant === false){
+            $usager->deliver_response(400, "Echec : Id de l'usager introuvable .", $_GET['id']);
+            return false;
+        }else{
+    
+            $usager->setId($idUsager);
+            return $usager;
         }
     }
 
-    function exceptions_error_handler($message) {
-        throw new ErrorException($message);
+    try{
+        checkInputToDeleteUsager();
+        $usager = setDeleteUsagerCommand();
+        if ($usager != false){
+            $usager->DeleteUsager();
+            $usager->deliver_response(200, "Succès : usager bien supprimé .", $_GET);
+        }
+    } catch (Exception $e) {
+        $usager->deliver_response(500, "Echec : usager non modifié .", $e->getMessage());
     }
-    
-    function setCommandDeleteUser($POST){
-        $commandDeleteUserToReturn = new Usager();
-        $commandDeleteUserToReturn->setId($POST['user_id']);
 
-        return $commandDeleteUserToReturn;
-    }
 ?>

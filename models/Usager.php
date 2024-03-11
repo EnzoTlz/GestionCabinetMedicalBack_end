@@ -12,6 +12,9 @@ class Usager
     private $lieu_naissance;
     private $numero_securite_social;
     private $medecin_referent;
+    private $code_postal;
+    private $sexe;
+    private $ville;
 
     public function __construct(){
         $this->dbconfig = DbConfig::getDbConfig();
@@ -72,7 +75,7 @@ class Usager
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++DELETE USER+++++++++++++++++++++++++++++++++++++++++++++++
 
-    public function DeleteUser(){
+    public function DeleteUsager(){
         try{
             $req = $this->dbconfig->getPDO()->prepare(
                 'DELETE FROM usager
@@ -85,7 +88,7 @@ class Usager
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
     //+++++++++++++++++++++++++++++++++++++++++++++++++++MODIFICATION USER+++++++++++++++++++++++++++++++++++++++++++++++
-    public function ModifyUser(){
+    public function ModifyUsager(){
         try{
             $req = $this->dbconfig->getPDO()->prepare(
             'UPDATE usager SET 
@@ -163,7 +166,7 @@ class Usager
     // GET USAGER BY ID
     public function getUsagerByID($Id_Usager){
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT nom, prenom , numero_securite_social FROM usager WHERE Id_Usager = :IdUsager');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager WHERE Id_Usager = :IdUsager');
             $req->bindValue(':IdUsager', $Id_Usager, PDO::PARAM_INT);
             $req->execute();
     
@@ -242,6 +245,18 @@ class Usager
         $this->lieu_naissance = $lieu_naissance;
     }
 
+    public function setSexe($sexe){
+        $this->sexe = $sexe;
+    }
+
+    public function setVille($ville){
+        $this->ville = $ville;
+    }
+    
+    public function setCodePostal($code_postal){
+        $this->code_postal = $code_postal;
+    }
+
     public function setNumeroSecuriteSocial($numero_securite_social){
         $this->numero_securite_social = $numero_securite_social;
     }
@@ -283,7 +298,14 @@ class Usager
     public function getMedecinReferent(){
         return $this->medecin_referent;
     }
-    
-
+    public function getCodePostal(){
+        return $this->code_postal;
+    }
+    public function getSexe(){
+        return $this->sexe;
+    }
+    public function getVille(){
+        return $this->ville;
+    }
 }
 ?>
