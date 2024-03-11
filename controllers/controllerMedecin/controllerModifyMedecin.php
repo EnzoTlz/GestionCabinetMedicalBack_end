@@ -17,17 +17,24 @@
         $medecin = new Medecin();
         $medecin->setId($idMedecin);
         $medecinExistant = $medecin->getMedecinById(); //recupere le medecin avec l'id
+        if($medecinExistant === false){
+            $medecin->deliver_response(400, "Echec : Id du médecin introuvable .", $_GET['id']);
+            return false;
+        }else{
+            // Check si certain champs sont vide -> si oui on laisse les champs existant
+            $prenom = isset($data['prenom']) ? $data['prenom'] : $medecinExistant["prenom"];
+            $nom = isset($data['nom']) ? $data['nom'] : $medecinExistant["nom"];
+            $civilite = isset($data['civilite']) ? $data['civilite'] : $medecinExistant["civilite"];
+    
+            $medecin->setId($idMedecin);
+            $medecin->setNom($nom);
+            $medecin->setPrenom($prenom);
+            $medecin->setCivilite($civilite);
 
-        // Check si certain champs sont vide -> si oui on laisse les champs existant
-        $prenom = isset($data['prenom']) ? $data['prenom'] : $medecinExistant["prenom"];
-        $nom = isset($data['nom']) ? $data['nom'] : $medecinExistant["nom"];
-        $civilite = isset($data['civilite']) ? $data['civilite'] : $medecinExistant["civilite"];
+            return $medecin;
+        }
 
-        $medecin->setId($idMedecin);
-        $medecin->setNom($nom);
-        $medecin->setPrenom($prenom);
-        $medecin->setCivilite($civilite);
-        return $medecin;
+        
     }
 
     try {
@@ -36,8 +43,11 @@
 
         CheckInputModifyMedecin($data);
         $medecin = setModifyMedecinCommand($data);
-        $medecin->ModifyMedecin();
-        $medecin->deliver_response(200, "Succès : Médecin bien modifié .", $data);
+        if ($medecin != false){
+            $medecin->ModifyMedecin();
+            $medecin->deliver_response(200, "Succès : Médecin bien modifié .", $data);
+        }
+
 
     } catch (Exception $e) {
         $medecin->deliver_response(500, "Echec : Médecin non modifié .", $e->getMessage());
