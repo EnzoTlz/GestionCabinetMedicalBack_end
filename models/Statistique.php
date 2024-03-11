@@ -24,7 +24,7 @@ class Statistique {
 
     public function getNbFemme() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "femme"');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "F"');
             $req->execute();
             $nbFemme = $req->fetch();
             return $nbFemme;
@@ -35,7 +35,7 @@ class Statistique {
 
     public function getNbHomme() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "homme"');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "H"');
             $req->execute();
             $nbHomme = $req->fetch();
             return $nbHomme;
@@ -46,7 +46,7 @@ class Statistique {
 
     public function getNbHommeMoins25Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "homme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) < 25');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "H" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) < 25');
             $req->execute();
             $nbHommeMoins25Ans = $req->fetch();
             return $nbHommeMoins25Ans;
@@ -57,7 +57,7 @@ class Statistique {
 
     public function getNbFemmeMoins25Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "femme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) < 25');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "F" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) < 25');
             $req->execute();
             $nbFemmeMoins25Ans = $req->fetch();
             return $nbFemmeMoins25Ans;
@@ -68,7 +68,7 @@ class Statistique {
 
     public function getNbHommeEntre25et50Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "homme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 25 AND 50');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "H" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) BETWEEN 25 AND 50');
             $req->execute();
             $nbHommeEntre25et50Ans = $req->fetch();
             return $nbHommeEntre25et50Ans;
@@ -79,7 +79,7 @@ class Statistique {
 
     public function getNbFemmeEntre25et50Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "femme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) BETWEEN 25 AND 50');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "F" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) BETWEEN 25 AND 50');
             $req->execute();
             $nbFemmeEntre25et50Ans = $req->fetch();
             return $nbFemmeEntre25et50Ans;
@@ -90,7 +90,7 @@ class Statistique {
 
     public function getNbHommePlus50Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "homme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) > 50');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "H" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) > 50');
             $req->execute();
             $nbHommePlus50Ans = $req->fetch();
             return $nbHommePlus50Ans;
@@ -101,7 +101,7 @@ class Statistique {
 
     public function getNbFemmePlus50Ans() {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE civilite = "femme" AND TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) > 50');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT COUNT(*) FROM usager WHERE sexe = "F" AND TIMESTAMPDIFF(YEAR, date_nais, CURDATE()) > 50');
             $req->execute();
             $nbFemmePlus50Ans = $req->fetch();
             return $nbFemmePlus50Ans;
@@ -120,7 +120,7 @@ class Statistique {
             $outputTab = array();
             foreach ($result as $medecin) {
                 $totalHoursAndMinutes = $this->convertMinutesToHoursMinutes($medecin['TotalMinutes']);
-                $output = '<tr><th>'. $medecin['prenom'] . ' ' . $medecin['nom'] . '</th><td>'. $totalHoursAndMinutes . '</td></tr>';
+                $output = $medecin['prenom'] . ' '. $medecin['nom'] .' '.$totalHoursAndMinutes;
                 array_push($outputTab, $output);
             }
             return $outputTab;
@@ -132,7 +132,18 @@ class Statistique {
         $remainingMinutes = $minutes % 60;
         return $hours . ' h ' . $remainingMinutes . ' min';
     }
-    
+    function deliver_response($status_code, $status_message, $data){
+
+        http_response_code($status_code);
+        header("Content-Type:application/json; charset=utf-8");
+        $response['status_code'] = $status_code;
+        $response['status_message'] = $status_message;
+        $response['data'] = $data;
+        $json_response = json_encode($response);
+        if($json_response===false)
+            die('json encode ERROR : '.json_last_error_msg());
+        echo $json_response;
+    }
 
 }
 ?>
