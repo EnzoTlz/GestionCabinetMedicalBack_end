@@ -9,7 +9,6 @@
             
             exit;
         }
-
     }
     function setModifyMedecinCommand($data){
         $idMedecin = $_GET['id'];
@@ -33,8 +32,6 @@
 
             return $medecin;
         }
-
-        
     }
 
     try {

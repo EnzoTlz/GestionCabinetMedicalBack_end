@@ -6,7 +6,6 @@
         if (!isset($_GET['id'])) {
             http_response_code(400);
             echo json_encode(array("status" => "error", "message" => "Id non trouvé."));
-            
             exit;
         }
 
@@ -34,7 +33,7 @@
             $num_secu = isset($data['num_secu']) ? $data['num_secu'] : $usagerExistant["num_secu"];
             $medecin_referent = isset($data['medecin_referent']) ? $data['medecin_referent'] : $usagerExistant["medecin_referent"];
             
-            $usager->setId($Id_Usager);
+            $usager->setId($idUsager);
             $usager->setCivilite($civilite);
             $usager->setNom($nom);
             $usager->setPrenom($prenom);    
@@ -46,6 +45,7 @@
             $usager->setCodePostal($code_postal);
             $usager->setNumeroSecuriteSocial($num_secu);
             $usager->setMedecinReferent($medecin_referent);
+            var_dump($usager);
 
             return $usager;
         }  
@@ -62,10 +62,8 @@
             $usager->deliver_response(200, "Succès : Usager bien modifié .", $usager);
         }
 
-
     } catch (Exception $e) {
         $usager->deliver_response(500, "Echec : Usager non modifié .", $e->getMessage());
-
     }
 
 

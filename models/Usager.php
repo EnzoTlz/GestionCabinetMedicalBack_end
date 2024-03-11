@@ -25,18 +25,21 @@ class Usager
     public function addUser()
     {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('INSERT INTO usager (civilite ,nom, prenom, adresse, date_naissance,lieu_naissance, numero_securite_social,medecin_referent) 
-            VALUES (:civilite,:nom, :prenom, :adresse, :date_naissance,:lieu_naissance, :numero_securite_social, :medecin_referent )');
+            $req = $this->dbconfig->getPDO()->prepare('INSERT INTO usager (civilite ,nom, prenom, adresse, date_nais,lieu_nais, num_secu,medecin_referent , sexe, code_postal, ville) 
+            VALUES (:civilite,:nom, :prenom, :adresse, :date_nais,:lieu_nais, :num_secu, :medecin_referent , :sexe, :code_postal, :ville)');
 
             $req->execute(array(
                 'nom' => $this->nom,
                 'civilite' => $this->civilite,
                 'prenom' => $this->prenom,
                 'adresse' => $this->adresse,
-                'date_naissance' => $this->date_naissance,
-                'lieu_naissance' => $this->lieu_naissance,
-                'numero_securite_social' => $this->numero_securite_social,
+                'date_nais' => $this->date_naissance,
+                'lieu_nais' => $this->lieu_naissance,
+                'num_secu' => $this->numero_securite_social,
                 'medecin_referent' => $this->medecin_referent,
+                'code_postal' => $this->code_postal,
+                'sexe' => $this->sexe,
+                'ville' => $this->ville,
 
             ));
 
@@ -92,24 +95,32 @@ class Usager
         try{
             $req = $this->dbconfig->getPDO()->prepare(
             'UPDATE usager SET 
-                civilite = :form_civilite,
-                nom = :form_nom,
-                prenom = :form_prenom,
-                adresse = :form_adresse,
-                date_naissance = :form_date_naissance,
-                lieu_naissance = :form_lieu_naissance,
-                numero_securite_social = :form_numero_securite_social
-                WHERE Id_Usager = :user_id');
+                civilite = :civilite,
+                nom = :nom,
+                prenom = :prenom,
+                adresse = :adresse,
+                date_nais = :date_naissance,
+                lieu_nais = :lieu_naissance,
+                num_secu = :numero_securite_social,
+                medecin_referent = :medecin_referent,
+                code_postal = :code_postal,
+                sexe = :sexe,
+                ville = :ville
+                WHERE Id_Usager = :Id_Usager');
 
             $req->execute(array(
-                'user_id' => $this->Id_Usager,
-                'form_civilite' => $this->civilite,
-                'form_nom' => $this->nom,
-                'form_prenom' => $this->prenom,
-                'form_adresse' => $this->adresse,
-                'form_date_naissance' => $this->date_naissance,
-                'form_lieu_naissance' => $this->lieu_naissance,
-                'form_numero_securite_social' => $this->numero_securite_social,
+                'Id_Usager' => $this->Id_Usager,
+                'civilite' => $this->civilite,
+                'nom' => $this->nom,
+                'prenom' => $this->prenom,
+                'adresse' => $this->adresse,
+                'date_naissance' => $this->date_naissance,
+                'lieu_naissance' => $this->lieu_naissance,
+                'numero_securite_social' => $this->numero_securite_social,
+                'medecin_referent' => $this->medecin_referent,
+                'code_postal' => $this->code_postal,
+                'sexe' => $this->sexe,
+                'ville' => $this->ville,
 
             ));
 
