@@ -1,6 +1,5 @@
 <?php
 require_once 'DbConfig.php';
-
 class Usager
 {
     private DbConfig $dbconfig;
@@ -17,10 +16,9 @@ class Usager
     private $sexe;
     private $ville;
 
-    public function __construct(DbConfig $dbconfig){
-        $this->dbconfig = $dbconfig;
+    public function __construct(){
+        $this->dbconfig = DbConfig::getDbConfig();
     }
-
     
     
     //+++++++++++++++++++++++++++++++++++++++++++++++++++AJOUT USER+++++++++++++++++++++++++++++++++++++++++++++++
@@ -208,21 +206,14 @@ class Usager
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
     //UTILISER POUR GETALL
-    public function getAllUsager()
-    {
+    public function getAllUsager(){
         try {
-            $pdo = $this->dbconfig->getPDO();
-            if ($pdo) {
-                $req = $pdo->prepare('SELECT * FROM usager');
-                $req->execute();
-                $result = $req->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            } else {
-                echo "Erreur: Impossible d'obtenir la connexion PDO.";
-            }
-        } catch (Exception $pe) {
-            echo 'ERREUR : ' . $pe->getMessage();
-        }
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager');
+            $req->execute();
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+            
+        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
     }
 
 
