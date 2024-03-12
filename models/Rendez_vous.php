@@ -13,6 +13,7 @@
         private $duree_rdv;
         private $heure_rdv;
         private $medecin_choose;
+        private $id_rendez_vous;
 
     public function __construct(){
         $this->dbconfig = DbConfig::getDbConfig();
