@@ -45,7 +45,6 @@
             $usager->setCodePostal($code_postal);
             $usager->setNumeroSecuriteSocial($num_secu);
             $usager->setMedecinReferent($medecin_referent);
-            var_dump($usager);
 
             return $usager;
         }  
