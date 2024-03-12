@@ -4,7 +4,7 @@
     require_once 'Usager.php';
     class Rendez_vous {
 
-        private DbConfig $dbConfig;
+        private DbConfig $dbconfig;
         public Usager $usager;
         private $nom;
         private $prenom;
@@ -13,7 +13,7 @@
         private $duree_rdv;
         private $heure_rdv;
         private $medecin_choose;
-        
+
     public function __construct(){
         $this->dbconfig = DbConfig::getDbConfig();
         $this->usager = new Usager();
