@@ -1,11 +1,7 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
-header("Access-Control-Allow-Headers: Content-Type");
-
 require_once '../../models/Medecin.php';
-
+include_once '../../cors.php';
 function checkInputToAddMedecin($data) {
     if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom'])) {
         http_response_code(400);
