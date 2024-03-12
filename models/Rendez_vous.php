@@ -1,10 +1,10 @@
 <?php
 
-    require_once 'dbConfig.php';
+    require_once 'DbConfig.php';
     require_once 'Usager.php';
     class Rendez_vous {
 
-        private dbConfig $dbConfig;
+        private DbConfig $dbConfig;
         public Usager $usager;
         private $nom;
         private $prenom;
@@ -14,7 +14,7 @@
         private $heure_rdv;
 
     public function __construct(){
-        $this->dbConfig = dbConfig::getdbConfig();
+        $this->dbconfig = DbConfig::getDbConfig();
         $this->usager = new Usager();
     
     }
@@ -22,7 +22,7 @@
     public function SearchUserForRDV($numero_securite_social)
     {
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT u.Id_Usager, u.civilite, u.nom, u.prenom, u.adresse, u.date_naissance, u.lieu_naissance, u.numero_securite_social, u.medecin_referent
+            $req = $this->dbconfig->getPDO()->prepare('SELECT u.Id_Usager, u.civilite, u.nom, u.prenom, u.adresse, u.date_naissance, u.lieu_naissance, u.numero_securite_social, u.medecin_referent
                 FROM usager u
                 WHERE u.numero_securite_social = :numero_securite_social');
             $req->execute(array(
@@ -46,7 +46,7 @@
     public function getMedecinById($Id_Medecin)
     {
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin, nom,prenom FROM medecin WHERE Id_Medecin = :Id_Medecin');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Medecin, nom,prenom FROM medecin WHERE Id_Medecin = :Id_Medecin');
             $req->execute(array(
                 ':Id_Medecin' => $Id_Medecin
             ));
@@ -59,7 +59,7 @@
     public function getNomPrenomMedecin()
     {
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin, nom, prenom FROM medecin');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Medecin, nom, prenom FROM medecin');
             $req->execute();
             $result = $req->fetchAll(PDO::FETCH_ASSOC);
     
@@ -84,7 +84,7 @@
     //ADD RDV
     public function addRdv(){
         try{
-            $req = $this->dbConfig->getPDO()->prepare('INSERT INTO rdv (duree_rendez_vous , date_rendez_vous , Id_Medecin , Id_Usager,heure_rendez_vous) 
+            $req = $this->dbconfig->getPDO()->prepare('INSERT INTO rdv (duree_rendez_vous , date_rendez_vous , Id_Medecin , Id_Usager,heure_rendez_vous) 
             VALUES (:duree_rdv , :date_rdv , :Id_Medecin , :Id_Usager, :heure_rdv)');
 
             $req->execute(array(
@@ -100,7 +100,7 @@
 
     public function getAllRdv(){
         try{
-            $req = $this->dbConfig->getPDO()->prepare('SELECT id_rendez_vous, duree_rendez_vous , date_rendez_vous , Id_Medecin , Id_Usager , heure_rendez_vous FROM rdv ORDER BY date_rendez_vous');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, duree_rendez_vous , date_rendez_vous , Id_Medecin , Id_Usager , heure_rendez_vous FROM rdv ORDER BY date_rendez_vous');
             $req->execute();
             $result = $req->fetchAll(PDO::FETCH_ASSOC);
             return $result;
@@ -110,7 +110,7 @@
 
     public function getModifyRdv(){
         try{
-            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM rdv WHERE id_rendez_vous = :id_rendez_vous');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM rdv WHERE id_rendez_vous = :id_rendez_vous');
             $req->execute();
             return $req;
         }catch(Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
@@ -118,7 +118,7 @@
 
     public function DeleteRdv(){
         try{
-            $req = $this->dbConfig->getPDO()->prepare(
+            $req = $this->dbconfig->getPDO()->prepare(
                 'DELETE FROM rdv
                 WHERE id_rendez_vous = :id_rendez_vous');
     
@@ -130,7 +130,7 @@
     }
     public function ModifyRdv(){
         try {
-            $req = $this->dbConfig->getPDO()->prepare(
+            $req = $this->dbconfig->getPDO()->prepare(
                 'UPDATE rdv SET
                 Date_rendez_vous = :dateRdv,
                 Duree_rendez_vous = :dureeRdv,
@@ -153,7 +153,7 @@
     
     public function SearchRdvByMedecin($medecin_selectionner){
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous
+            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous
             FROM rdv 
             WHERE Id_Medecin = :medecin_selectionner
             ORDER BY date_rendez_vous');
@@ -167,7 +167,7 @@
     }
     public function getUsagerIDByNameAndFristName($nom,$prenom){
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Usager, nom,prenom FROM usager WHERE nom = :nom AND prenom = :prenom');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Usager, nom,prenom FROM usager WHERE nom = :nom AND prenom = :prenom');
             $req->execute(array(
                 ':prenom' => $prenom,
                 ':nom' => $nom,
@@ -180,7 +180,7 @@
 
     public function getAllRdvUsagerByIdUsager($Id_Usager){
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Usager = :IdUsager');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Usager = :IdUsager');
             $req->bindValue(':IdUsager', $Id_Usager, PDO::PARAM_INT); 
             $req->execute();
 
@@ -192,7 +192,7 @@
     
     public function getMedecinIDByNameAndFristName($nom,$prenom){
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin, nom,prenom FROM medecin WHERE nom = :nom AND prenom = :prenom');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Medecin, nom,prenom FROM medecin WHERE nom = :nom AND prenom = :prenom');
             $req->execute(array(
                 ':prenom' => $prenom,
                 ':nom' => $nom,
@@ -205,7 +205,7 @@
 
     public function getAllRdvMedecinByIdMedecin($Id_Medecin){
         try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Medecin = :IdMedecin');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Medecin = :IdMedecin');
             $req->bindValue(':IdMedecin', $Id_Medecin, PDO::PARAM_INT); 
             $req->execute();
 
@@ -224,7 +224,7 @@
 
     public function CheckColisionRdv($id_medecin, $id_rendez_vous_to_ignore, $date_rdv, $heure_rdv, $duree_rdv) {
         try {
-            $req = $this->dbConfig->getPDO()->prepare('
+            $req = $this->dbconfig->getPDO()->prepare('
                 SELECT * 
                 FROM rdv 
                 WHERE Id_Medecin = :IdMedecin 
@@ -270,7 +270,7 @@
     //GET RDV BY ID
     public function getRdvById(){
         try {    
-            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_rendez_vous = :id');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_rendez_vous = :id');
             $req->execute([':id' => $this->getIdRdv()]);
             $result = $req->fetch(PDO::FETCH_ASSOC);
             return $result;
