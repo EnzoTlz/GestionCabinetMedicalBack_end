@@ -20,7 +20,7 @@ class Usager
     public function __construct(DbConfig $dbconfig){
         $this->dbconfig = $dbconfig;
     }
-}
+
     
     
     //+++++++++++++++++++++++++++++++++++++++++++++++++++AJOUT USER+++++++++++++++++++++++++++++++++++++++++++++++
