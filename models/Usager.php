@@ -28,12 +28,14 @@ class Usager
             $req = $this->dbconfig->getPDO()->prepare('INSERT INTO usager (civilite ,nom, prenom, adresse, date_nais,lieu_nais, num_secu,medecin_referent , sexe, code_postal, ville) 
             VALUES (:civilite,:nom, :prenom, :adresse, :date_nais,:lieu_nais, :num_secu, :medecin_referent , :sexe, :code_postal, :ville)');
 
+            $date_naissance_format = date('Y-m-d', strtotime($this->date_naissance));
+
             $req->execute(array(
                 'nom' => $this->nom,
                 'civilite' => $this->civilite,
                 'prenom' => $this->prenom,
                 'adresse' => $this->adresse,
-                'date_nais' => $this->date_naissance,
+                'date_nais' => $date_naissance_format,
                 'lieu_nais' => $this->lieu_naissance,
                 'num_secu' => $this->numero_securite_social,
                 'medecin_referent' => $this->medecin_referent,

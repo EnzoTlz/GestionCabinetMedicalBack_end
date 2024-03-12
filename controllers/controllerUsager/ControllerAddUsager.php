@@ -25,6 +25,7 @@
         $usager->setSexe($data['sexe']);     
         $usager->setVille($data['ville']);    
         $usager->setCodePostal($data['code_postal']);
+        // var_dump($usager->getDateNaissance());
         return $usager;
     }
 
