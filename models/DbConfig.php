@@ -1,7 +1,7 @@
 <?php
 class DbConfig
 {
-    private PDO $linkpdo;
+    private ?PDO $linkpdo = null; // Déclarer $linkpdo comme nullable
 
     private function __construct()
     {
@@ -18,6 +18,9 @@ class DbConfig
 
     public function getPDO()
     {
+        if ($this->linkpdo === null) {
+            $this->__construct(); // Initialiser $linkpdo si ce n'est pas déjà fait
+        }
         return $this->linkpdo;
     }
 
