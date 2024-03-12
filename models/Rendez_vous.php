@@ -12,7 +12,8 @@
         private $date_rdv;
         private $duree_rdv;
         private $heure_rdv;
-
+        private $medecin_choose;
+        
     public function __construct(){
         $this->dbconfig = DbConfig::getDbConfig();
         $this->usager = new Usager();
