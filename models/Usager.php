@@ -17,7 +17,7 @@ class Usager
     private $ville;
 
     public function __construct(){
-        $this->dbconfig = DbConfig::getDbConfig();
+        $this->dbconfig = $dbconfig;
     }
     
     
@@ -206,14 +206,21 @@ class Usager
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
     //UTILISER POUR GETALL
-    public function getAllUsager(){
+    public function getAllUsager()
+    {
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager');
-            $req->execute();
-            $result = $req->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-            
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
+            $pdo = $this->dbconfig->getPDO();
+            if ($pdo) {
+                $req = $pdo->prepare('SELECT * FROM usager');
+                $req->execute();
+                $result = $req->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } else {
+                echo "Erreur: Impossible d'obtenir la connexion PDO.";
+            }
+        } catch (Exception $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+        }
     }
 
 
