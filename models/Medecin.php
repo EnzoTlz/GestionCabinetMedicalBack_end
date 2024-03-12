@@ -1,6 +1,5 @@
 <?php
 require_once 'DbConfig.php';
-include_once '../cors.php';
 class Medecin{
     private DbConfig $dbConfig;
     private $nom;

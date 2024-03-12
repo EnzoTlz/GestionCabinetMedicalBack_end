@@ -1,5 +1,4 @@
 <?php
-include_once '../cors.php';
 class DbConfig
 {
     private PDO $linkpdo;
