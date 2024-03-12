@@ -1,5 +1,6 @@
 <?php
 require_once 'DbConfig.php';
+
 class Usager
 {
     private DbConfig $dbconfig;
@@ -16,9 +17,10 @@ class Usager
     private $sexe;
     private $ville;
 
-    public function __construct(){
+    public function __construct(DbConfig $dbconfig){
         $this->dbconfig = $dbconfig;
     }
+}
     
     
     //+++++++++++++++++++++++++++++++++++++++++++++++++++AJOUT USER+++++++++++++++++++++++++++++++++++++++++++++++
