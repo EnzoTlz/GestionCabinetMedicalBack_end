@@ -1,4 +1,5 @@
     <?php
+        include_once '../../cors.php';
         require_once '../../models/Rendez_vous.php';
         
         function checkInputToAddRdv($data) {

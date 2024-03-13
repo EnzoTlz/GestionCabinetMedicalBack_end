@@ -1,5 +1,5 @@
 <?php
-
+    include_once '../../cors.php';
     require_once '../../models/Statistique.php';
 
     try{
