@@ -3,9 +3,9 @@
     require_once '../../models/Usager.php';
 
     function checkInputToAddUser($data) {
-        if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom']) || !isset($data['adresse']) || !isset($data['date_nais']) || !isset($data['lieu_nais']) || !isset($data['num_secu']) || !isset($data['medecin_referent']) || !isset($data['sexe']) || !isset($data['ville']) || !isset($data['code_postal'])){
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Tous les champs sont obligatoires."));
+        $usager = new Usager();
+        if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom']) || !isset($data['adresse']) || !isset($data['date_nais']) || !isset($data['lieu_nais']) || !isset($data['num_secu']) || !isset($data['id_medecin']) || !isset($data['sexe']) || !isset($data['ville']) || !isset($data['code_postal'])){
+            $usager->deliver_response(400, "Echec : Tous les champs ne sont pas renseigné.",null);
             
             exit;
         }
@@ -21,7 +21,7 @@
         $usager->setDateNaissance($data['date_nais']);
         $usager->setLieuNaissance($data['lieu_nais']);
         $usager->setNumeroSecuriteSocial($data['num_secu']);
-        $usager->setMedecinReferent($data['medecin_referent']);
+        $usager->setMedecinReferent($data['id_medecin']);
         $usager->setSexe($data['sexe']);     
         $usager->setVille($data['ville']);    
         $usager->setCodePostal($data['code_postal']);
