@@ -3,11 +3,10 @@
     require_once("../../models/Medecin.php");
 
 
-    function CheckInputModifyMedecin($data) {
+    function CheckInputModifyMedecin() {
+        $medecin = new Medecin();
         if (!isset($_GET['id'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Id non trouvé."));
-            
+            $medecin->deliver_response(400, "Echec : Id non renseigné.",null);
             exit;
         }
     }
@@ -18,7 +17,7 @@
         $medecin->setId($idMedecin);
         $medecinExistant = $medecin->getMedecinById(); //recupere le medecin avec l'id
         if($medecinExistant === false){
-            $medecin->deliver_response(400, "Echec : Id du médecin introuvable .", $_GET['id']);
+            $medecin->deliver_response(404, "Echec : Id du médecin introuvable .", $_GET['id']);
             return false;
         }else{
             // Check si certain champs sont vide -> si oui on laisse les champs existant
@@ -39,7 +38,7 @@
 
         $data = json_decode(file_get_contents("php://input"), true); 
 
-        CheckInputModifyMedecin($data);
+        CheckInputModifyMedecin();
         $medecin = setModifyMedecinCommand($data);
         if ($medecin != false){
             $medecin->ModifyMedecin();

@@ -3,10 +3,9 @@
     require_once("../../models/Usager.php");
 
     function checkInputToGetUsager() {
+        $usager = new Usager();
         if (!isset($_GET['id'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Id non trouvée."));
-            
+            $usager->deliver_response(400, "Echec : Id non renseigné.",null);
             exit;
         }
     }

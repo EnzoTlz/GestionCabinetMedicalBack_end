@@ -25,7 +25,6 @@
         $usager->setSexe($data['sexe']);     
         $usager->setVille($data['ville']);    
         $usager->setCodePostal($data['code_postal']);
-        // var_dump($usager->getDateNaissance());
         return $usager;
     }
 
@@ -34,7 +33,7 @@
         checkInputToAddUser($data);
         $commandAddUser = setCommandAddUser($data);
         $commandAddUser->addUser();
-        $commandAddUser->deliver_response(200, "Succès : Utilisateur bien ajoutée .", $data);
+        $commandAddUser->deliver_response(201, "Succès : Utilisateur bien ajoutée .", $data);
 
     } catch (Exception $e) {
         $commandAddUser->deliver_response(500, "Echec : Utilisateur bien non ajoutée .", $e->getMessage());

@@ -5,9 +5,8 @@
 
     function checkInputToDeleteRdv() {
         if (!isset($_GET['id'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Id non renseigné."));
-            
+            $rendezVous = new Rendez_vous();
+            $rendezVous->deliver_response(404, "Echec : Id non renseignée .",null);
             exit;
         }
     }
@@ -18,7 +17,7 @@
         $rdv->setIdRdv($idRdv);
         $rdvExistant = $rdv->getRdvById(); //recupere le medecin avec l'id
         if($rdvExistant === false){
-            $rdv->deliver_response(400, "Echec : Id de la consultation introuvable :", $_GET['id']);
+            $rdv->deliver_response(404, "Echec : Id de la consultation introuvable :", $_GET['id']);
             return false;
         }else{
             return $rdv;

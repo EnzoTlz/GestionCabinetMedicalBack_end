@@ -26,7 +26,7 @@
         checkInputToAddMedecin($data);
         $medecin = setCommandToAddMedecin($data);
         $medecin->AddMedecin();
-        $medecin->deliver_response(200, "Succès : Médecin bien ajoutée .", $data);
+        $medecin->deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
 
     } catch (Exception $e) {
         $medecin->deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());

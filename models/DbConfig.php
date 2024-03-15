@@ -7,8 +7,8 @@ class DbConfig
     {
         try {
             // gestionmedical_bd 351413_enzo
-            $this->linkpdo = new PDO('mysql:host=mysql-gestionmedical.alwaysdata.net;dbname=gestionmedical_bd', '351413', '$iutinfo', [
-            // $this->linkpdo = new PDO('mysql:host=localhost;dbname=projet', 'Enzo', '$iutinfo', [
+            // $this->linkpdo = new PDO('mysql:host=mysql-gestionmedical.alwaysdata.net;dbname=gestionmedical_bd', '351413', '$iutinfo', [
+            $this->linkpdo = new PDO('mysql:host=localhost;dbname=projet', 'Enzo', '$iutinfo', [
 
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION

@@ -4,9 +4,8 @@
 
     function checkInputToGetRdv() {
         if (!isset($_GET['id'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "id non trouvé."));
-            
+            $rendezVous = new Rendez_vous();
+            $rendezVous->deliver_response(400, "Echec : Id non renseignée .",null);
             exit;
         }
     }
@@ -23,7 +22,7 @@
         $rdv = setCommandToGetRdv($_GET['id']);
         $rdvById = $rdv->getRdvById();
         if(!$rdvById){
-            $rdv->deliver_response(500, "Echec : Consultation non trouvé .", false);
+            $rdv->deliver_response(404, "Echec : Consultation non trouvé .", false);
         }else{
             $rdv->deliver_response(200, "Succès : Consultation bien trouvé .", $rdvById);
         }

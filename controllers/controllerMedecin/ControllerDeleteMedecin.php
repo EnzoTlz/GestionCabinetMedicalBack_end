@@ -4,10 +4,9 @@
 
 
     function checkInputToDeleteMedecin() {
+        $medecin = new Medecin();
         if (!isset($_GET['id'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Id non renseigné."));
-            
+            $medecin->deliver_response(400, "Echec : Id non renseigné.",null);
             exit;
         }
     }
@@ -18,10 +17,9 @@
         $medecin->setId($idMedecin);
         $medecinExistant = $medecin->getMedecinById(); //recupere le medecin avec l'id
         if($medecinExistant === false){
-            $medecin->deliver_response(400, "Echec : Id du médecin introuvable .", $_GET['id']);
+            $medecin->deliver_response(404, "Echec : Id du médecin introuvable .", $idMedecin);
             return false;
         }else{
-    
             $medecin->setId($idMedecin);
             return $medecin;
         }

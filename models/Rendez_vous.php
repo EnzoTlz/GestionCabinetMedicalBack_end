@@ -280,6 +280,47 @@
             echo 'ERREUR : ' . $pe->getMessage();
         }
     }
+    // VERIFIER SI L'ID USAGER EXISTE
+    public function idExistsUsager($Id_Usager)
+    {
+        try {
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Usager FROM usager WHERE Id_Usager = :Id_Usager');
+            $req->execute(array(
+                ':Id_Usager' => $Id_Usager
+            ));
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true; // L'ID existe
+            } else {
+                return false; // L'ID n'existe pas
+            }
+        } catch (PDOException $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+            return false; // En cas d'erreur, retourne false
+        }
+    }
+
+    // VERIFIER SI L'ID MEDECIN EXISTE
+    public function idExistsMedecin($Id_Medecin)
+    {
+        try {
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Medecin FROM medecin WHERE Id_Medecin = :Id_Medecin');
+            $req->execute(array(
+                ':Id_Medecin' => $Id_Medecin
+            ));
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true; // L'ID existe
+            } else {
+                return false; // L'ID n'existe pas
+            }
+        } catch (PDOException $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+            return false; // En cas d'erreur, retourne false
+        }
+    }
 
     function deliver_response($status_code, $status_message, $data){
 
