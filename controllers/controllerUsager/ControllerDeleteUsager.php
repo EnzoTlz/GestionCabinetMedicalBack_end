@@ -1,12 +1,20 @@
 <?php
     include_once '../../cors.php';
     require_once("../../models/Usager.php");
-
+    require_once("../../models/Rendez_vous.php");
 
     function checkInputToDeleteUsager() {
         $usager = new Usager();
         if (!isset($_GET['id'])) {
             $usager->deliver_response(400, "Echec : Id non renseigné.",null);
+            exit;
+        }
+    }
+    function checkIfUserHasRdv(){
+        $usager = new Usager();
+        $hasRdv = $usager->idUsagerHasRdv(($_GET['id']));
+        if($hasRdv == true){
+            $usager->deliver_response(401, "Echec : Suppresion du patient impossible il a une/des consultations.", $_GET['id']);
             exit;
         }
     }
@@ -28,6 +36,7 @@
 
     try{
         checkInputToDeleteUsager();
+        checkIfUserHasRdv();
         $usager = setDeleteUsagerCommand();
         if ($usager != false){
             $usager->DeleteUsager();

@@ -2,11 +2,26 @@
     include_once '../../cors.php';
     require_once("../../models/Medecin.php");
 
-
     function checkInputToDeleteMedecin() {
         $medecin = new Medecin();
         if (!isset($_GET['id'])) {
             $medecin->deliver_response(400, "Echec : Id non renseigné.",null);
+            exit;
+        }
+    }
+    function checkIfMedecinHasRdv(){
+        $medecin = new Medecin();
+        $hasRdv = $medecin->idMedecinHasRdv(($_GET['id']));
+        if($hasRdv){
+            $medecin->deliver_response(401, "Echec : Suppresion du médecin impossible il a une/des consultations.", $_GET['id']);
+            exit;
+        }
+    }
+    function checkIfMedecinIsReferent(){
+        $medecin = new Medecin();
+        $isReferent = $medecin->isReferent(($_GET['id']));
+        if($isReferent){
+            $medecin->deliver_response(401, "Echec : Suppresion du médecin impossible il est référent d'un patient.", $_GET['id']);
             exit;
         }
     }
@@ -27,6 +42,8 @@
 
     try{
         checkInputToDeleteMedecin();
+        checkIfMedecinHasRdv();
+        checkIfMedecinIsReferent();
         $medecin = setDeleteMedecinCommand();
         if ($medecin != false){
             $medecin->DeleteMedecin();

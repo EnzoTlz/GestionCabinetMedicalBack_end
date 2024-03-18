@@ -181,7 +181,44 @@ function SearchMedecin($context){
             die('json encode ERROR : '.json_last_error_msg());
         echo $json_response;
     }
+    public function idMedecinHasRdv($Id_Medecin)
+    {
+        try {
+            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin FROM rdv WHERE Id_Medecin = :Id_Medecin');
+            $req->execute(array(
+                ':Id_Medecin' => $Id_Medecin
+            ));
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
 
+            if (count($result) > 0) {
+                return true; // L'ID existe
+            } else {
+                return false; // L'ID n'existe pas
+            }
+        } catch (PDOException $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+            return false; // En cas d'erreur, retourne false
+        }
+    }
+    function isReferent($Id_Medecin)
+    {
+        try {
+            $req = $this->dbConfig->getPDO()->prepare('SELECT medecin_referent FROM usager WHERE medecin_referent = :medecin_referent');
+            $req->execute(array(
+                ':medecin_referent' => $Id_Medecin
+            ));
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+    
+            if (count($result) > 0) {
+                return true; // L'ID existe
+            } else {
+                return false; // L'ID n'existe pas
+            }
+        } catch (PDOException $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+            return false; // En cas d'erreur, retourne false
+        }
+    }
     
 //+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setNom($nom){

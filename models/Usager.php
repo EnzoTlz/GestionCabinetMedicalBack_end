@@ -230,6 +230,26 @@ class Usager
             die('json encode ERROR : '.json_last_error_msg());
         echo $json_response;
     }
+
+    public function idUsagerHasRdv($Id_Usager)
+    {
+        try {
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Usager FROM rdv WHERE Id_Usager = :Id_Usager');
+            $req->execute(array(
+                ':Id_Usager' => $Id_Usager
+            ));
+            $result = $req->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true; // L'ID existe
+            } else {
+                return false; // L'ID n'existe pas
+            }
+        } catch (PDOException $pe) {
+            echo 'ERREUR : ' . $pe->getMessage();
+            return false; // En cas d'erreur, retourne false
+        }
+    }
     //+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setId($Id_Usager){
         $this->Id_Usager = $Id_Usager;
