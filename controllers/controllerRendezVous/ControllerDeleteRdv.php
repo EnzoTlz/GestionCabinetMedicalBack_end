@@ -15,7 +15,7 @@
 
         $rdv = new Rendez_vous();
         $rdv->setIdRdv($idRdv);
-        $rdvExistant = $rdv->getRdvById(); //recupere le medecin avec l'id
+        $rdvExistant = $rdv->getRdvById($idRdv); //recupere le medecin avec l'id
         if($rdvExistant === false){
             $rdv->deliver_response(404, "Echec : Id de la consultation introuvable :", $_GET['id']);
             return false;
