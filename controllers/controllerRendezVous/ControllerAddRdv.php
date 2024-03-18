@@ -22,14 +22,26 @@
 
         function setCommandAddRdv($data){
             $commandAddRdvToReturn = new Rendez_vous();
-            $date_consultation_bd = date('d-m-Y', strtotime($data['date_consult']));
-            $commandAddRdvToReturn->setDateRdv($date_consultation_bd);
+        
+            $date_consult = str_replace('-', '/', $data['date_consult']);
+            $date = DateTime::createFromFormat('d/m/y', $date_consult);
+        
+            if ($date !== false) {
+                $dateRdv = $date->format('Y-m-d');
+                $commandAddRdvToReturn->setDateRdv($dateRdv);
+            } else {
+                $commandAddRdvToReturn->deliver_response(400, "Echec : Format de date invalide .", $data['date_consult']);
+            }
+        
             $commandAddRdvToReturn->setHeureRdv($data['heure_consult']);
             $commandAddRdvToReturn->setDureeRdv($data['duree_consult']);
             $commandAddRdvToReturn->setmedecinChoseForRdv($data['id_medecin']);
             $commandAddRdvToReturn->setIdUsager($data['id_usager']);
+        
             return $commandAddRdvToReturn;
         }
+        
+        
 
         try{
             $rendezVous = new Rendez_vous();
@@ -37,7 +49,6 @@
             checkInputToAddRdv($data);
             $commandAddRdv = setCommandAddRdv($data);
             $collisions = $rendezVous->CheckColisionRdv($commandAddRdv->getMedecinChoseForRdv(), null, $commandAddRdv->getDateRdv(), $commandAddRdv->getHeureRdv(), $commandAddRdv->getDureeRdv());
-
             if (!$collisions) {
                 $commandAddRdv->AddRdv();
                 $rendezVous->deliver_response(201, "Success : Rendez vous bien ajouté .", $data);
