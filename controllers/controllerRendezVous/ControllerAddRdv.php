@@ -20,15 +20,26 @@
             }
         }
 
+        function convertDate($date)
+        {
+            if (strpos($date, '-') !== false) {
+                $date = str_replace('-', '/', $date);
+            }
+
+            $dateTime = DateTime::createFromFormat('d/m/y', $date);
+
+            if ($dateTime !== false) {
+                $date = $dateTime->format('Y-m-d');
+            } 
+            return $date;
+        }
+   
         function setCommandAddRdv($data){
             $commandAddRdvToReturn = new Rendez_vous();
+            $date_consult = convertDate($data['date_consult']);
         
-            $date_consult = str_replace('-', '/', $data['date_consult']);
-            $date = DateTime::createFromFormat('d/m/y', $date_consult);
-        
-            if ($date !== false) {
-                $dateRdv = $date->format('Y-m-d');
-                $commandAddRdvToReturn->setDateRdv($dateRdv);
+            if ($date_consult !== false) {
+                $commandAddRdvToReturn->setDateRdv($date_consult);
             } else {
                 $commandAddRdvToReturn->deliver_response(400, "Echec : Format de date invalide .", $data['date_consult']);
             }
@@ -40,7 +51,6 @@
         
             return $commandAddRdvToReturn;
         }
-        
         
 
         try{
