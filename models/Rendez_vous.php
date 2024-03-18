@@ -270,16 +270,17 @@
         return $timestamp;
     }   
     //GET RDV BY ID
-    public function getRdvById(){
+    public function getRdvById($id_rendez_vous){
         try {    
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_rendez_vous = :id');
-            $req->execute([':id' => $this->getIdRdv()]);
-            $result = $req->fetch(PDO::FETCH_ASSOC);
-            return $result;
-        } catch(Exception $pe) {
-            echo 'ERREUR : ' . $pe->getMessage();
-        }
+            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_rendez_vous FROM rdv WHERE Id_rendez_vous = :id');
+            $req->execute([':id' => $id_rendez_vous]);
+            
+            $rowCount = $req->rowCount();
+            return $rowCount > 0;
+    
+        } catch(PDOException $pe) {throw $pe;}
     }
+    
     // VERIFIER SI L'ID USAGER EXISTE
     public function idExistsUsager($Id_Usager)
     {

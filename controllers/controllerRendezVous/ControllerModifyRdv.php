@@ -26,7 +26,7 @@
     function setModifyRdvCommand($data){
 
         $rdv = new Rendez_vous();
-        $rdvExistant = $rdv->getRdvById(); //recupere du rdv avec l'id
+        $rdvExistant = $rdv->getRdvById($_GET['id']); //recupere du rdv avec l'id
         if($rdvExistant === false){
             $rdv->deliver_response(404, "Echec : Id du rendez_vous introuvable .", $_GET['id']);
             return false;
@@ -54,7 +54,6 @@
         $rdv = new Rendez_vous();
         $erreur = new Rendez_vous(); // SI rdv == false alors erreur ==> déclare un objet au cas ou
         $data = json_decode(file_get_contents("php://input"), true); 
-
         CheckInputModifyRdv($data);
         $rdv = setModifyRdvCommand($data);
 
