@@ -22,8 +22,8 @@
 
         function setCommandAddRdv($data){
             $commandAddRdvToReturn = new Rendez_vous();
-            
-            $commandAddRdvToReturn->setDateRdv($data['date_consult']);
+            $date_consultation_bd = date('d-m-Y', strtotime($data['date_consult']));
+            $commandAddRdvToReturn->setDateRdv($date_consultation_bd);
             $commandAddRdvToReturn->setHeureRdv($data['heure_consult']);
             $commandAddRdvToReturn->setDureeRdv($data['duree_consult']);
             $commandAddRdvToReturn->setmedecinChoseForRdv($data['id_medecin']);
