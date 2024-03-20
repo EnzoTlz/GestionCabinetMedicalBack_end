@@ -207,7 +207,7 @@
 
     public function getAllRdvMedecinByIdMedecin($Id_Medecin){
         try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, nom_patient, prenom_patient, numero_securite_social, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Medecin = :IdMedecin');
+            $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Medecin = :IdMedecin');
             $req->bindValue(':IdMedecin', $Id_Medecin, PDO::PARAM_INT); 
             $req->execute();
 
