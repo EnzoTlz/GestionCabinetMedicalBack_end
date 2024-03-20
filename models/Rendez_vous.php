@@ -209,12 +209,15 @@
         try {
             $req = $this->dbconfig->getPDO()->prepare('SELECT id_rendez_vous, duree_rendez_vous, date_rendez_vous, Id_Medecin, Id_Usager ,heure_rendez_vous FROM rdv WHERE Id_Medecin = :IdMedecin');
             $req->bindValue(':IdMedecin', $Id_Medecin, PDO::PARAM_INT); 
-            $result = $req->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-        } catch (Exception $pe) {
+            $req->execute();
+            $resultat = $req->fetchAll(PDO::FETCH_ASSOC); // Utiliser fetchAll pour récupérer tous les résultats
+    
+            return $resultat;
+        } catch (PDOException $pe) { // Changement d'Exception à PDOException
             echo 'ERREUR : ' . $pe->getMessage();
         }
     }
+    
 
     function convertMinutesToHoursMinutes($minutes) {
         $hours = floor($minutes / 60);
