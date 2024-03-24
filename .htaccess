@@ -1,9 +1,23 @@
-# RewriteEngine On
-# RewriteBase /
-# AllowOverride All
+RewriteEngine On
+RewriteBase /
+AllowOverride All
 
-# # Réécriture pour la modification d'un médecin
-# RewriteRule ^medecins/modifier/([0-9]+)$ /controllers/controllerMedecin/ControllerModifyMedecin.php?id=$1 [L]
+# Redirection de /api/medecins pour GET vers ControllerGetAllMedecin.php
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^medecins$ controllers/controllerMedecin/ControllerGetAllMedecin.php [L]
 
-# # Réécriture pour la suppression d'un médecin
-# RewriteRule ^api/medecins/supprimer/([0-9]+)$ /api/controllers/controllerMedecin/ControllerDeleteMedecin.php?id=$1 [L]
+# Redirection de /api/medecins pour POST vers ControllerAddMedecin.php
+RewriteCond %{REQUEST_METHOD} ^POST$
+RewriteRule ^medecins$ controllers/controllerMedecin/ControllerAddMedecin.php [L]
+
+# Redirection de /api/medecins/{id} pour GET vers ControllerGetMedecin.php
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerGetMedecin.php?id=$1 [L]
+
+# Redirection de /api/medecins/{id} pour DELETE vers ControllerDeleteMedecin.php
+RewriteCond %{REQUEST_METHOD} ^DELETE$
+RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerDeleteMedecin.php?id=$1 [L]
+
+# Redirection de /api/medecins/{id} pour PUT vers ControllerModifyMedecin.php
+RewriteCond %{REQUEST_METHOD} ^PATCH$
+RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerModifyMedecin.php?id=$1 [L]
