@@ -1,6 +1,6 @@
 RewriteEngine On
 RewriteBase /
-AllowOverride All
+; AllowOverride All
 
 # Redirection de /api/medecins pour GET vers ControllerGetAllMedecin.php
 RewriteCond %{REQUEST_METHOD} ^GET$
