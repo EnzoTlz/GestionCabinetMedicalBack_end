@@ -1,6 +1,8 @@
 RewriteEngine On
 RewriteBase /
 
+# ===================================== MEDECIN =====================================
+
 # Redirection de /api/medecins pour GET vers ControllerGetAllMedecin.php
 RewriteCond %{REQUEST_METHOD} ^GET$
 RewriteRule ^medecins$ GestionCabinetMedicalBack_end/controllers/controllerMedecin/ControllerGetAllMedecin.php [L]
@@ -20,3 +22,25 @@ RewriteRule ^medecins/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/contro
 # Redirection de /api/medecins/{id} pour PUT vers ControllerModifyMedecin.php
 RewriteCond %{REQUEST_METHOD} ^PATCH$
 RewriteRule ^medecins/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/controllerMedecin/ControllerModifyMedecin.php?id=$1 [L]
+
+# ===================================== PATIENT =====================================
+
+# Redirection de /api/patients pour GET vers ControllerGetAllPatient.php
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^usagers$ GestionCabinetMedicalBack_end/controllers/controllerUsager/ControllerGetAllUsager.php [L]
+
+# Redirection de /api/patients pour POST vers ControllerAddPatient.php
+RewriteCond %{REQUEST_METHOD} ^POST$
+RewriteRule ^usagers$ GestionCabinetMedicalBack_end/controllers/controllerUsager/ControllerAddUsager.php [L]
+
+# Redirection de /api/patients/{id} pour GET vers ControllerGetPatient.php
+RewriteCond %{REQUEST_METHOD} ^GET$
+RewriteRule ^usagers/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/controllerUsager/ControllerGetUsager.php?id=$1 [L]
+
+# Redirection de /api/patients/{id} pour DELETE vers ControllerDeletePatient.php
+RewriteCond %{REQUEST_METHOD} ^DELETE$
+RewriteRule ^usagers/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/controllerUsager/ControllerDeleteUsager.php?id=$1 [L]
+
+# Redirection de /api/patients/{id} pour PUT vers ControllerModifyPatient.php
+RewriteCond %{REQUEST_METHOD} ^PATCH$
+RewriteRule ^usagers/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/controllerUsager/ControllerModifyUsager.php?id=$1 [L]
