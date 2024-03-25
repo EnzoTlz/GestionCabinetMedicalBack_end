@@ -20,7 +20,7 @@
     try {
         checkInputToGetRdv();
         $rdv = setCommandToGetRdv($_GET['id']);
-        $rdvById = $rdv->getRdvById();
+        $rdvById = $rdv->getRdvById($_GET['id']);
         if(!$rdvById){
             $rdv->deliver_response(404, "Echec : Consultation non trouvé .", false);
         }else{
