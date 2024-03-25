@@ -73,8 +73,8 @@ RewriteRule ^consultations/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/c
 
 # Redirection de /api/statistiques pour GET vers ControllerGetStatistiques.php
 RewriteCond %{REQUEST_METHOD} ^GET$
-RewriteRule ^statistiques/medecins$ GestionCabinetMedicalBack_end/controllers/controllerStatistique/ControllerGetStatsMedecin.php [L]
+RewriteRule ^stats/medecins$ GestionCabinetMedicalBack_end/controllers/controllerStatistique/ControllerGetStatsMedecin.php [L]
 
 # Redirection de /api/statistiques pour GET vers ControllerGetStatistiques.php
 RewriteCond %{REQUEST_METHOD} ^GET$
-RewriteRule ^statistiques/usagers$ GestionCabinetMedicalBack_end/controllers/controllerStatistique/ControllerGetStatsUsager.php [L]
+RewriteRule ^stats/usagers$ GestionCabinetMedicalBack_end/controllers/controllerStatistique/ControllerGetStatsUsager.php [L]
