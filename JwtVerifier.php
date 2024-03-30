@@ -13,7 +13,7 @@ function verify_jwt($jwt) {
     
     // Execute the request
     $result = curl_exec($ch);
-    
+    var_dump($result);
     // Check if any error occurred
     if (curl_errno($ch)) {
         curl_close($ch);
@@ -22,7 +22,7 @@ function verify_jwt($jwt) {
 
     $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    
+    var_dump($$responseCode);
     if ($responseCode == 200) {
         // Token is valid
         return true;
