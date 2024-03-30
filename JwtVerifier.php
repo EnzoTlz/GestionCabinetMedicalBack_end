@@ -9,28 +9,26 @@ function verify_jwt($jwt) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_POST, true); // Specify that you want a POST request
+    curl_setopt($ch, CURLOPT_POSTFIELDS, []); // You can set post fields if necessary
     
     // Execute the request
     $result = curl_exec($ch);
-
-    // Debugging output
-    var_dump($result);
-
+    
     // Check if any error occurred
     if (curl_errno($ch)) {
-        $error = curl_error($ch);
         curl_close($ch);
-        var_dump($error); // Display error
-        throw new Exception($error);
+        throw new Exception(curl_error($ch));
     }
 
     $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
-    var_dump($responseCode); // Display HTTP response code
-
-    // Assuming your API returns 200 for valid tokens;
-    // you might also want to check the body of the response for more details if your API provides such
-    return $responseCode == 200;
+    if ($responseCode == 200) {
+        // Token is valid
+        return true;
+    } else {
+        // Token is not valid
+        return false;
+    }
 }
 ?>
