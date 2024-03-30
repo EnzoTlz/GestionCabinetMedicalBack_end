@@ -24,7 +24,7 @@
                 return $matches[1];
             }
         }
-        $retour->deliver_response(403, "Echec : JWT non trouvé .", null);
+        $retour->deliver_response(401, "Echec : JWT non trouvé .", null);
         return null;
     }
 
