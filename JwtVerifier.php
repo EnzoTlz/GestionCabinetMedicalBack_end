@@ -31,18 +31,4 @@ function verify_jwt($jwt) {
         return false;
     }
 }
-
-
-function get_jwt_from_headers() {
-    $headers = apache_request_headers();
-    $authorizationHeader = isset($headers['Authorization']) ? $headers['Authorization'] : null;
-
-    if ($authorizationHeader) {
-        list($jwt) = sscanf($authorizationHeader, 'Bearer %s');
-        if($jwt) {
-            return $jwt;
-        }
-    }
-    return null;
-}
 ?>

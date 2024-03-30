@@ -55,7 +55,10 @@
         $retour = new Medecin();
 
         $jwt = get_bearer_token();
-        var_dump($jwt);
+        if(!empty($jwt)){
+            $JwtIsValid = verify_jwt($jwt);
+            var_dump($JwtIsValid);
+        }
 
 
         $data = json_decode(file_get_contents("php://input"), true);
