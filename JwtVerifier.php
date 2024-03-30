@@ -8,27 +8,22 @@ function verify_jwt($jwt) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $jwt));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
-    curl_setopt($ch, CURLOPT_POST, true); // Specify that you want a POST request
-    curl_setopt($ch, CURLOPT_POSTFIELDS, []); // You can set post fields if necessary
+    curl_setopt($ch, CURLOPT_POST, true); // La méthode POST est utilisée pour la requête.
     
     // Execute the request
     $result = curl_exec($ch);
     
     // Check if any error occurred
     if (curl_errno($ch)) {
+        $error = curl_error($ch);
         curl_close($ch);
-        throw new Exception(curl_error($ch));
+        throw new Exception($error);
     }
 
     $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
-    if ($responseCode == 200) {
-        // Token is valid
-        return true;
-    } else {
-        // Token is not valid
-        return false;
-    }
+    // Retourne true si le code de réponse est 200, indiquant que le JWT est valide.
+    return $responseCode == 200;
 }
 ?>
