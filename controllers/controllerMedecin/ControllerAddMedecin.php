@@ -32,7 +32,7 @@
                 $medecin->AddMedecin();
                 deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
             }else{
-                deliver_response(401, "Echec : Jwt non valide .", $data);
+                deliver_response(401, "Echec : Jwt non valide .", $jwt);
             }
         }
     } catch (Exception $e) {
