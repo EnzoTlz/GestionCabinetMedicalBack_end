@@ -22,8 +22,6 @@
     }
 
     try {
-        $retour = new Medecin();
-
         $jwt = get_bearer_token();
         if(!empty($jwt)){
             $JwtIsValid = verify_jwt($jwt);
@@ -32,12 +30,12 @@
                 checkInputToAddMedecin($data);
                 $medecin = setCommandToAddMedecin($data);
                 $medecin->AddMedecin();
-                $retour->deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
+                deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
             }else{
-                $retour->deliver_response(401, "Echec : Jwt non valide .", $data);
+                deliver_response(401, "Echec : Jwt non valide .", $data);
             }
         }
     } catch (Exception $e) {
-        $retour->deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
+        deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
     }
 ?>
