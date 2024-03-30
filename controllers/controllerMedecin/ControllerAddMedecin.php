@@ -5,9 +5,7 @@
 
     function checkInputToAddMedecin($data) {
         if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom'])) {
-            http_response_code(400);
-            echo json_encode(array("status" => "error", "message" => "Tous les champs sont obligatoires."));
-            
+            deliver_response(400,"Echec : Tous les champs sont obligatoires. .", $data);
             exit;
         }
     }
