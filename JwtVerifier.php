@@ -8,8 +8,10 @@ function verify_jwt($jwt) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $jwt));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_POST, true); // Specify that you want a POST request
+    curl_setopt($ch, CURLOPT_POSTFIELDS, []); // You can set post fields if necessary
     
-    // Execute the GET request
+    // Execute the request
     $result = curl_exec($ch);
     
     // Check if any error occurred
@@ -29,6 +31,7 @@ function verify_jwt($jwt) {
         return false;
     }
 }
+
 
 function get_jwt_from_headers() {
     $headers = apache_request_headers();
