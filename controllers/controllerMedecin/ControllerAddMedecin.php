@@ -1,6 +1,7 @@
 <?php
     include_once '../../cors.php';
     require_once '../../models/Medecin.php';
+    require_once '../../JwtVerifier.php';
 
     function checkInputToAddMedecin($data) {
         if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom'])) {
@@ -22,6 +23,10 @@
 
 
     try {
+        $jwt = get_jwt_from_headers();
+        if (!$jwt || !verify_jwt($jwt)) {
+            throw new Exception("Invalid JWT token.");
+        }
         $data = json_decode(file_get_contents("php://input"), true);
         checkInputToAddMedecin($data);
         $medecin = setCommandToAddMedecin($data);

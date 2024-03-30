@@ -18,6 +18,6 @@ RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerGetMedec
 RewriteCond %{REQUEST_METHOD} ^DELETE$
 RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerDeleteMedecin.php?id=$1 [L]
 
-# Redirection de /api/medecins/{id} pour PUT vers ControllerModifyMedecin.php
+# Redirection de /api/medecins/{id} pour PATCH vers ControllerModifyMedecin.php
 RewriteCond %{REQUEST_METHOD} ^PATCH$
 RewriteRule ^medecins/([0-9]+)$ controllers/controllerMedecin/ControllerModifyMedecin.php?id=$1 [L]
