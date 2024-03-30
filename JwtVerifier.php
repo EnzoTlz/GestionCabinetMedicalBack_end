@@ -25,7 +25,7 @@
             }
         }
         $retour->deliver_response(401, "Echec : JWT non trouvé .", null);
-        return null;
+        exit;
     }
 
     function verify_jwt($jwt) {
