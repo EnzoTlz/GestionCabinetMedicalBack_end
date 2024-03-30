@@ -23,6 +23,7 @@
 
 
     try {
+        $retour = new Medecin();
         $jwt = get_jwt_from_headers();
         if (!$jwt || !verify_jwt($jwt)) {
             throw new Exception("Invalid JWT token.");
@@ -31,9 +32,9 @@
         checkInputToAddMedecin($data);
         $medecin = setCommandToAddMedecin($data);
         $medecin->AddMedecin();
-        $medecin->deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
+        $retour->deliver_response(201, "Succès : Médecin bien ajoutée .", $data);
 
     } catch (Exception $e) {
-        $medecin->deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
+        $retour->deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
     }
 ?>
