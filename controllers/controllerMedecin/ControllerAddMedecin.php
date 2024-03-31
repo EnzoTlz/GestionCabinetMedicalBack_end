@@ -20,8 +20,6 @@
     }
 
     try {
-        $headers = get_authorization_header();
-        var_dump($headers);
         $jwt = get_bearer_token();
         if(!empty($jwt)){
             $JwtIsValid = verify_jwt($jwt);
