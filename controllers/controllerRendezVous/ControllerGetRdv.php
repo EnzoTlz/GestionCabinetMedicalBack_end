@@ -26,7 +26,7 @@
                 $rdv = setCommandToGetRdv($_GET['id']);
                 $rdvById = $rdv->getRdvById($_GET['id']);
                 if(!$rdvById){
-                    deliver_response(404, "Echec : Consultation non trouvé .", false);
+                    deliver_response(404, "Echec : Consultation non trouvé .", null);
                 }else{
                     deliver_response(200, "Succès : Consultation bien trouvé .", $rdvById);
                 }

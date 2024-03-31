@@ -272,16 +272,23 @@
         return $timestamp;
     }   
     //GET RDV BY ID
-    public function getRdvById($id_rendez_vous){
+    public function getRdvById($id_rendez_vous) {
         try {    
-            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_rendez_vous FROM rdv WHERE Id_rendez_vous = :id');
+            // Préparer la requête pour sélectionner toutes les colonnes du rdv
+            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_rendez_vous = :id');
             $req->execute([':id' => $id_rendez_vous]);
             
-            $rowCount = $req->rowCount();
-            return $rowCount > 0;
+            // Récupérer le premier enregistrement trouvé
+            $rdv = $req->fetch(PDO::FETCH_ASSOC);
+            
+            // Si un rdv est trouvé, retourner ses détails, sinon retourner null
+            return $rdv ? $rdv : null;
     
-        } catch(PDOException $pe) {throw $pe;}
+        } catch(PDOException $pe) {
+            throw $pe;
+        }
     }
+    
     
     // VERIFIER SI L'ID USAGER EXISTE
     public function idExistsUsager($Id_Usager)
