@@ -1,6 +1,7 @@
 <?php
     include_once '../../cors.php';
     require_once '../../models/Usager.php';
+    require_once '../../JwtVerifier.php';
 
     function checkInputToAddUser($data) {
         $usager = new Usager();
@@ -29,12 +30,19 @@
     }
 
     try {
-        $data = json_decode(file_get_contents("php://input"), true);
-        checkInputToAddUser($data);
-        $commandAddUser = setCommandAddUser($data);
-        $commandAddUser->addUser();
-        $commandAddUser->deliver_response(201, "Succès : Utilisateur bien ajoutée .", $data);
-
+        $jwt = get_bearer_token();
+        if(!empty($jwt)){
+            $JwtIsValid = verify_jwt($jwt);
+            if($JwtIsValid){
+                $data = json_decode(file_get_contents("php://input"), true);
+                checkInputToAddUser($data);
+                $commandAddUser = setCommandAddUser($data);
+                $commandAddUser->addUser();
+                $commandAddUser->deliver_response(201, "Succès : Utilisateur bien ajoutée .", $data);
+            }else{
+                deliver_response(401, "Echec : Jwt non valide .", $jwt);
+            }
+        }
     } catch (Exception $e) {
         $commandAddUser->deliver_response(500, "Echec : Utilisateur bien non ajoutée .", $e->getMessage());
     }
