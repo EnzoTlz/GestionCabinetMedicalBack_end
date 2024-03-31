@@ -4,19 +4,18 @@
         require_once '../../JwtVerifier.php';
 
         function checkInputToAddRdv($data) {
-            $rendezVous = new Rendez_vous();
             if (!isset($data['id_usager']) || !isset($data['id_medecin']) || !isset($data['date_consult']) || !isset($data['heure_consult']) || !isset($data['duree_consult'])){
-                $rendezVous->deliver_response(400, "Echec : Tous les champs sont obligatoires.",null);
+                deliver_response(400, "Echec : Tous les champs sont obligatoires.",null);
                 exit;
             }
             $UsagerExist = $rendezVous->idExistsUsager($data['id_usager']);
             if(!$UsagerExist){
-                $rendezVous->deliver_response(404, "Echec : Id de l'usager introuvable .", $data['id_usager']);
+                deliver_response(404, "Echec : Id de l'usager introuvable .", $data['id_usager']);
                 exit;
             }
             $MedecinExist = $rendezVous->idExistsMedecin($data['id_medecin']);
             if(!$MedecinExist){
-                $rendezVous->deliver_response(404, "Echec : Id du médecin introuvable .", $data['id_medecin']);
+                deliver_response(404, "Echec : Id du médecin introuvable .", $data['id_medecin']);
                 exit;
             }
         }
@@ -42,7 +41,7 @@
             if ($date_consult !== false) {
                 $commandAddRdvToReturn->setDateRdv($date_consult);
             } else {
-                $commandAddRdvToReturn->deliver_response(400, "Echec : Format de date invalide .", $data['date_consult']);
+                deliver_response(400, "Echec : Format de date invalide .", $data['date_consult']);
             }
         
             $commandAddRdvToReturn->setHeureRdv($data['heure_consult']);
@@ -66,16 +65,16 @@
                     $collisions = $rendezVous->CheckColisionRdv($commandAddRdv->getMedecinChoseForRdv(), null, $commandAddRdv->getDateRdv(), $commandAddRdv->getHeureRdv(), $commandAddRdv->getDureeRdv());
                     if (!$collisions) {
                         $commandAddRdv->AddRdv();
-                        $rendezVous->deliver_response(201, "Success : Rendez vous bien ajouté .", $data);
+                        deliver_response(201, "Success : Rendez vous bien ajouté .", $data);
                     } else {
-                        $rendezVous->deliver_response(409, "Echec : Colision entre les rendez vous .", $data);
+                        deliver_response(409, "Echec : Colision entre les rendez vous .", $data);
                     }
                 }else{
                     deliver_response(401, "Echec : Jwt non valide .", $jwt);
                 }
             }
         }catch(Exception $e){
-            $rendezVous->deliver_response(500, "Echec : Rendez non ajouté .", $e->getMessage());
+            deliver_response(500, "Echec : Rendez non ajouté .", $e->getMessage());
         }
 
     ?>  
