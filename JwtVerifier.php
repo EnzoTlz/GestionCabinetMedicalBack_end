@@ -18,13 +18,12 @@
 
     function get_bearer_token(){
         $headers = get_authorization_header();
-        $retour = new Medecin();
         if(!empty($headers)){
             if(preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
                 return $matches[1];
             }
         }
-        $retour->deliver_response(401, "Echec : JWT non trouvé .", null);
+        deliver_response(401, "Echec : JWT non trouvé .", null);
         exit;
     }
 
