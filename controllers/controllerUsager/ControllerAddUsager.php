@@ -6,7 +6,7 @@
     function checkInputToAddUser($data) {
         $usager = new Usager();
         if (!isset($data['civilite']) || !isset($data['nom']) || !isset($data['prenom']) || !isset($data['adresse']) || !isset($data['date_nais']) || !isset($data['lieu_nais']) || !isset($data['num_secu']) || !isset($data['id_medecin']) || !isset($data['sexe']) || !isset($data['ville']) || !isset($data['code_postal'])){
-            $usager->deliver_response(400, "Echec : Tous les champs ne sont pas renseigné.",null);
+            deliver_response(400, "Echec : Tous les champs ne sont pas renseigné.",null);
             
             exit;
         }
@@ -38,13 +38,13 @@
                 checkInputToAddUser($data);
                 $commandAddUser = setCommandAddUser($data);
                 $commandAddUser->addUser();
-                $commandAddUser->deliver_response(201, "Succès : Utilisateur bien ajoutée .", $data);
+                deliver_response(201, "Succès : Utilisateur bien ajoutée .", $data);
             }else{
                 deliver_response(401, "Echec : Jwt non valide .", $jwt);
             }
         }
     } catch (Exception $e) {
-        $commandAddUser->deliver_response(500, "Echec : Utilisateur bien non ajoutée .", $e->getMessage());
+        deliver_response(500, "Echec : Utilisateur bien non ajoutée .", $e->getMessage());
     }
 
 ?>  
