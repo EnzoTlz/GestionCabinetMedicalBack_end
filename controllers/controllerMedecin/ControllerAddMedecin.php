@@ -20,7 +20,7 @@
     }
 
     try {
-        $headers = apache_request_headers();
+        $headers = get_authorization_header();
         var_dump($headers);
         $jwt = get_bearer_token();
         if(!empty($jwt)){
