@@ -1,7 +1,8 @@
     <?php
         include_once '../../cors.php';
         require_once '../../models/Rendez_vous.php';
-        
+        require_once '../../JwtVerifier.php';
+
         function checkInputToAddRdv($data) {
             $rendezVous = new Rendez_vous();
             if (!isset($data['id_usager']) || !isset($data['id_medecin']) || !isset($data['date_consult']) || !isset($data['heure_consult']) || !isset($data['duree_consult'])){
@@ -54,16 +55,24 @@
         
 
         try{
-            $rendezVous = new Rendez_vous();
-            $data = json_decode(file_get_contents("php://input"), true);
-            checkInputToAddRdv($data);
-            $commandAddRdv = setCommandAddRdv($data);
-            $collisions = $rendezVous->CheckColisionRdv($commandAddRdv->getMedecinChoseForRdv(), null, $commandAddRdv->getDateRdv(), $commandAddRdv->getHeureRdv(), $commandAddRdv->getDureeRdv());
-            if (!$collisions) {
-                $commandAddRdv->AddRdv();
-                $rendezVous->deliver_response(201, "Success : Rendez vous bien ajouté .", $data);
-            } else {
-                $rendezVous->deliver_response(409, "Echec : Colision entre les rendez vous .", $data);
+            $jwt = get_bearer_token();
+            if(!empty($jwt)){
+                $JwtIsValid = verify_jwt($jwt);
+                if($JwtIsValid){
+                    $rendezVous = new Rendez_vous();
+                    $data = json_decode(file_get_contents("php://input"), true);
+                    checkInputToAddRdv($data);
+                    $commandAddRdv = setCommandAddRdv($data);
+                    $collisions = $rendezVous->CheckColisionRdv($commandAddRdv->getMedecinChoseForRdv(), null, $commandAddRdv->getDateRdv(), $commandAddRdv->getHeureRdv(), $commandAddRdv->getDureeRdv());
+                    if (!$collisions) {
+                        $commandAddRdv->AddRdv();
+                        $rendezVous->deliver_response(201, "Success : Rendez vous bien ajouté .", $data);
+                    } else {
+                        $rendezVous->deliver_response(409, "Echec : Colision entre les rendez vous .", $data);
+                    }
+                }else{
+                    deliver_response(401, "Echec : Jwt non valide .", $jwt);
+                }
             }
         }catch(Exception $e){
             $rendezVous->deliver_response(500, "Echec : Rendez non ajouté .", $e->getMessage());
