@@ -1,25 +1,26 @@
 <?php
     include_once '../../cors.php';
     require_once '../../models/Rendez_vous.php';
+    require_once '../../JwtVerifier.php';
 
     function CheckInputModifyRdv($data) {
         $rendezVous = new Rendez_vous();
         if (!isset($data['id_usager']) || !isset($data['id_medecin']) || !isset($data['date_consult']) || !isset($data['heure_consult']) || !isset($data['duree_consult'])){
-            $rendezVous->deliver_response(400, "Echec : Tous les champs sont obligatoires.",null);
+            deliver_response(400, "Echec : Tous les champs sont obligatoires.",null);
             exit;
         }
         $UsagerExist = $rendezVous->idExistsUsager($data['id_usager']);
         if(!$UsagerExist){
-            $rendezVous->deliver_response(404, "Echec : Id de l'usager introuvable .", $data['id_usager']);
+            deliver_response(404, "Echec : Id de l'usager introuvable .", $data['id_usager']);
             exit;
         }
         $MedecinExist = $rendezVous->idExistsMedecin($data['id_medecin']);
         if(!$MedecinExist){
-            $rendezVous->deliver_response(404, "Echec : Id du médecin introuvable .", $data['id_medecin']);
+            deliver_response(404, "Echec : Id du médecin introuvable .", $data['id_medecin']);
             exit;
         }
         if(!isset($_GET['id'])){
-            $rendezVous->deliver_response(400, "Echec : Id non renseignée .",null);
+            deliver_response(400, "Echec : Id non renseignée .",null);
             exit;
         }
     }
@@ -28,7 +29,7 @@
         $rdv = new Rendez_vous();
         $rdvExistant = $rdv->getRdvById($_GET['id']); //recupere du rdv avec l'id
         if($rdvExistant === false){
-            $rdv->deliver_response(404, "Echec : Id du rendez_vous introuvable .", $_GET['id']);
+            deliver_response(404, "Echec : Id du rendez_vous introuvable .", $_GET['id']);
             return false;
         }else{
             // Check si certain champs sont vide -> si oui on laisse les champs existant
@@ -51,24 +52,31 @@
     }
 
     try {
-        $rdv = new Rendez_vous();
-        $erreur = new Rendez_vous(); // SI rdv == false alors erreur ==> déclare un objet au cas ou
-        $data = json_decode(file_get_contents("php://input"), true); 
-        CheckInputModifyRdv($data);
-        $rdv = setModifyRdvCommand($data);
+        $jwt = get_bearer_token();
+        if(!empty($jwt)){
+            $JwtIsValid = verify_jwt($jwt);
+            if($JwtIsValid){
+                $rdv = new Rendez_vous();
+                $data = json_decode(file_get_contents("php://input"), true); 
+                CheckInputModifyRdv($data);
+                $rdv = setModifyRdvCommand($data);
 
-        if ($rdv != false){
-            $collisions = $rdv->CheckColisionRdv($rdv->getMedecinChoseForRdv(), $rdv->getIdRdv(), $rdv->getDateRdv(), $rdv->getHeureRdv(), $rdv->getDureeRdv());
-            if(!$collisions){
-                $rdv->ModifyRdv();// check
-                $rdv->deliver_response(200, "Succès : Rendez-vous bien modifié .", $data);
+                if ($rdv != false){
+                    $collisions = $rdv->CheckColisionRdv($rdv->getMedecinChoseForRdv(), $rdv->getIdRdv(), $rdv->getDateRdv(), $rdv->getHeureRdv(), $rdv->getDureeRdv());
+                    if(!$collisions){
+                        $rdv->ModifyRdv();// check
+                        deliver_response(200, "Succès : Rendez-vous bien modifié .", $data);
+                    }else{
+                        deliver_response(409, "Echec : Colision entre les rendez vous :", $_GET['id']);
+
+                    }
+                }
             }else{
-                $erreur->deliver_response(409, "Echec : Colision entre les rendez vous :", $_GET['id']);
-
+                deliver_response(401, "Echec : Jwt non valide .", $jwt);
             }
         }
     } catch (Exception $e) {
-        $rdv->deliver_response(500, "Echec : Rendez-vous non modifié .", $e->getMessage());
+        deliver_response(500, "Echec : Rendez-vous non modifié .", $e->getMessage());
 
     }
 
