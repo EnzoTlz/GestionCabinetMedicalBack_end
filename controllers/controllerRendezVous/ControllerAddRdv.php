@@ -4,6 +4,7 @@
         require_once '../../JwtVerifier.php';
 
         function checkInputToAddRdv($data) {
+            $rendezVous = new Rendez_vous;
             if (!isset($data['id_usager']) || !isset($data['id_medecin']) || !isset($data['date_consult']) || !isset($data['heure_consult']) || !isset($data['duree_consult'])){
                 deliver_response(400, "Echec : Tous les champs sont obligatoires.",null);
                 exit;
