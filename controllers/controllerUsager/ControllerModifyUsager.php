@@ -1,12 +1,11 @@
 <?php
     include_once '../../cors.php';
     require_once("../../models/Usager.php");
-
+    require_once '../../JwtVerifier.php';
 
     function CheckInputModifyusager() {
-        $usager = new Usager();
         if (!isset($_GET['id'])) {
-            $usager->deliver_response(400, "Echec : Id non renseigné.",null);
+            deliver_response(400, "Echec : Id non renseigné.",null);
             exit;
         }
     }
@@ -18,7 +17,7 @@
         $usager->setId($idUsager);
         $usagerExistant = $usager->getUsagerByID($idUsager); //recupere le usager avec l'id
         if($usagerExistant === false){
-            $usager->deliver_response(400, "Echec : Id de l'usager introuvable .", $_GET['id']);
+            deliver_response(400, "Echec : Id de l'usager introuvable .", $_GET['id']);
             return false;
         }else{
             // Check si certain champs sont vide -> si oui on laisse les champs existant
@@ -52,18 +51,24 @@
     }
 
     try {
+        $jwt = get_bearer_token();
+        if(!empty($jwt)){
+            $JwtIsValid = verify_jwt($jwt);
+            if($JwtIsValid){
+                $data = json_decode(file_get_contents("php://input"), true); 
 
-        $data = json_decode(file_get_contents("php://input"), true); 
-
-        CheckInputModifyusager($data);
-        $usager = setModifyusagerCommand($data);
-        if ($usager != false){
-            $usager->Modifyusager();
-            $usager->deliver_response(200, "Succès : Usager bien modifié .", $usager);
+                CheckInputModifyusager($data);
+                $usager = setModifyusagerCommand($data);
+                if ($usager != false){
+                    $usager->Modifyusager();
+                    deliver_response(200, "Succès : Usager bien modifié .", $usager);
+                }
+            }else{
+                deliver_response(401, "Echec : Jwt non valide .", $jwt);
+            }
         }
-
     } catch (Exception $e) {
-        $usager->deliver_response(500, "Echec : Usager non modifié .", $e->getMessage());
+        deliver_response(500, "Echec : Usager non modifié .", $e->getMessage());
     }
 
 
