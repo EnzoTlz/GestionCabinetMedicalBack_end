@@ -2,7 +2,7 @@
     
     header("Access-Control-Allow-Origin: https://gestionmedicalfront.alwaysdata.net");
     header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT, PATCH");
-    header("Access-Control-Allow-Headers: Content-Type");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         http_response_code(200);
