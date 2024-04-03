@@ -34,6 +34,6 @@
             }
         }
     } catch (Exception $e) {
-        deliver_response(500, "Echec : Médecin bien non ajoutée .", $e->getMessage());
+        deliver_response(500, "Echec : Médecin non ajoutée .", $e->getMessage());
     }
 ?>
