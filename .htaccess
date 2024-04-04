@@ -24,6 +24,11 @@ RewriteRule ^medecins/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/contro
 RewriteCond %{REQUEST_METHOD} ^PATCH$
 RewriteRule ^medecins/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/controllerMedecin/ControllerModifyMedecin.php?id=$1 [L]
 
+# Redirection de /api/medecins pour OPTIONS vers un fichier de gestion des options
+RewriteCond %{REQUEST_METHOD} ^OPTIONS$
+RewriteRule ^medecins$ GestionCabinetMedicalBack_end/controllers/controllerMedecin/ControllerOptions.php [L]
+
+
 # ===================================== PATIENT =====================================
 
 # Redirection de /api/patients pour GET vers ControllerGetAllPatient.php

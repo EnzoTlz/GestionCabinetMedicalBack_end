@@ -4,6 +4,7 @@
     require_once '../../JwtVerifier.php';
 
     try {
+        
         $medecin = new Medecin();
 
         $jwt = get_bearer_token();
