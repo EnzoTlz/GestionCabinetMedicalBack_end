@@ -54,6 +54,9 @@ RewriteRule ^usagers/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/control
 
 RewriteCond %{REQUEST_METHOD} ^OPTIONS$
 RewriteRule ^usagers$ GestionCabinetMedicalBack_end/cors.php [L]
+
+RewriteCond %{REQUEST_METHOD} ^OPTIONS$
+RewriteRule ^usagers/([0-9]+)$ GestionCabinetMedicalBack_end/cors.php [L]
 # ===================================== RENDEZ-VOUS =====================================
 
 # Redirection de /api/rendez-vous pour GET vers ControllerGetAllRendezVous.php
@@ -78,6 +81,9 @@ RewriteRule ^consultations/([0-9]+)$ GestionCabinetMedicalBack_end/controllers/c
 
 RewriteCond %{REQUEST_METHOD} ^OPTIONS$
 RewriteRule ^consultations$ GestionCabinetMedicalBack_end/cors.php [L]
+
+RewriteCond %{REQUEST_METHOD} ^OPTIONS$
+RewriteRule ^consultations/([0-9]+)$ GestionCabinetMedicalBack_end/cors.php [L]
 
 #AJOUTER LA REQUETE POUR LE FILTRE 
 
