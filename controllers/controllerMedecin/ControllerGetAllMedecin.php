@@ -1,7 +1,8 @@
 <?php
-    include_once '../../cors.php';
+    require_once( "../../cors.php");
     require_once("../../models/Medecin.php");
     require_once '../../JwtVerifier.php';
+
 
     try {
         
