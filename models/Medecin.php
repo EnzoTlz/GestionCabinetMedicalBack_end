@@ -10,8 +10,7 @@ class Medecin{
     public function __construct(){
         $this->dbConfig = DbConfig::getDbConfig();
     
-}
-//+++++++++++++++++++++++++++++++++++++++++++++++ADD MEDECIN+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    }
 
     function AddMedecin(){
         try{
@@ -27,33 +26,7 @@ class Medecin{
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
 
     }
-//+++++++++++++++++++++++++++++++++++++++++++++++++SEARCH MEDECIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-function SearchMedecin($context){
-    try {    
-        $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin, nom, prenom, civilite FROM medecin WHERE nom = :nom AND prenom = :prenom');
-        $req->execute(array(
-            'nom' => $this->nom,
-            'prenom' => $this->prenom,
-        ));
-        $result = $req->fetch(PDO::FETCH_ASSOC);
 
-        if ($result !== false) {
-            if ($context === 'Modify') {
-                $url = '../../front_end/medecin/ModifyMedecin.php?' . http_build_query($result);
-                header('Location: ' . $url);
-                exit();
-            } elseif ($context === 'Delete') {
-                $url = '../../front_end/medecin/DeleteMedecin.php?' . http_build_query($result);
-                header('Location: ' . $url);
-                exit();
-            }
-        } else {
-            echo 'Aucun utilisateur trouvé.';
-        }
-    } catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++DELETE MEDECIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     function DeleteMedecin(){
         try{
             $req = $this->dbConfig->getPDO()->prepare('DELETE FROM medecin WHERE Id_Medecin = :Id_Medecin');
@@ -62,7 +35,6 @@ function SearchMedecin($context){
             ));
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
-//+++++++++++++++++++++++++++++++++++++++++++++++++MODIFY MEDECIN +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     function ModifyMedecin(){
         try{
@@ -82,67 +54,6 @@ function SearchMedecin($context){
 
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
-
-    function CheckMedecinExist() {
-        try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM medecin WHERE nom = :nom AND prenom = :prenom');
-    
-            $req->execute(array(
-                'prenom' => $this->prenom,
-                'nom' => $this->nom,
-            ));
-    
-            $medecin = $req->fetch();
-            if ($medecin) {
-                header('Location: ../../front_end/medecin/medecin.php?nom=' . urlencode($medecin['nom']) . '&prenom=' . urlencode($medecin['prenom']));
-                exit;
-            } else {
-                header('Location: ../../front_end/index.html');
-                exit;
-            }
-    
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
-    public function getMedecinIDByNameAndFristName($nom,$prenom){
-        try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT Id_Medecin, nom,prenom FROM medecin WHERE nom = :nom AND prenom = :prenom');
-            $req->execute(array(
-                ':prenom' => $prenom,
-                ':nom' => $nom,
-            ));
-            $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    
-            return $result;
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
-
-    public function getAllRdvMedecinByIdMedecin($Id_Medecin){
-        try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_Medecin = :IdMedecin');
-            $req->bindValue(':IdMedecin', $Id_Medecin, PDO::PARAM_INT);
-            $req->execute();
-
-            return $req;
-        } catch (Exception $pe) {
-            echo 'ERREUR : ' . $pe->getMessage();
-        }
-    }
-
-    public function getNameAndFirstNameByID($Id_Medecin){
-        try {
-            $req = $this->dbConfig->getPDO()->prepare('SELECT nom, prenom FROM medecin WHERE Id_Medecin = :IdMedecin');
-            $req->bindValue(':IdMedecin', $Id_Medecin, PDO::PARAM_INT);
-            $req->execute();
-    
-            $result = $req->fetch(PDO::FETCH_ASSOC);
-    
-            return $result['nom'] . ' ' . $result['prenom'];
-        } catch (Exception $pe) {
-            echo 'ERREUR : ' . $pe->getMessage();
-        }
-    }
-    
-
 
     public function getAllMedecin(){
         try {
@@ -166,21 +77,6 @@ function SearchMedecin($context){
         }
     }
 
-
-
-
-    function deliver_response($status_code, $status_message, $data){
-
-        http_response_code($status_code);
-        header("Content-Type:application/json; charset=utf-8");
-        $response['status_code'] = $status_code;
-        $response['status_message'] = $status_message;
-        $response['data'] = $data;
-        $json_response = json_encode($response);
-        if($json_response===false)
-            die('json encode ERROR : '.json_last_error_msg());
-        echo $json_response;
-    }
     public function idMedecinHasRdv($Id_Medecin)
     {
         try {
@@ -200,6 +96,7 @@ function SearchMedecin($context){
             return false; // En cas d'erreur, retourne false
         }
     }
+    
     function isReferent($Id_Medecin)
     {
         try {
@@ -220,7 +117,6 @@ function SearchMedecin($context){
         }
     }
     
-//+++++++++++++++++++++++++++++++++++++++++++++++++++SETTER+++++++++++++++++++++++++++++++++++++++++++++++
     public function setNom($nom){
         $this->nom = $nom;
     }
