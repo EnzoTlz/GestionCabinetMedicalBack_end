@@ -132,18 +132,7 @@ class Statistique {
         $remainingMinutes = $minutes % 60;
         return $hours . ' h ' . $remainingMinutes . ' min';
     }
-    function deliver_response($status_code, $status_message, $data){
 
-        http_response_code($status_code);
-        header("Content-Type:application/json; charset=utf-8");
-        $response['status_code'] = $status_code;
-        $response['status_message'] = $status_message;
-        $response['data'] = $data;
-        $json_response = json_encode($response);
-        if($json_response===false)
-            die('json encode ERROR : '.json_last_error_msg());
-        echo $json_response;
-    }
 
 }
 ?>

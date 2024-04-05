@@ -48,38 +48,6 @@ class Usager
         } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
     }
 
-    public function SearchUser($context)
-    {
-        try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Usager,civilite, nom, prenom, adresse, date_naissance, lieu_naissance, numero_securite_social
-            FROM usager WHERE nom = :nom AND prenom = :prenom');
-    
-            $req->execute(array(
-                ':nom' => $this->nom,
-                ':prenom' => $this->prenom,
-            ));
-    
-            $result = $req->fetch(PDO::FETCH_ASSOC);
-    
-            if ($result !== false) {
-                if ($context === 'Modify') {
-                    $url = '../../front_end/usager/ModifyUsager.php?' . http_build_query($result);
-                    header('Location: ' . $url);
-                    exit();
-                } elseif ($context === 'Delete') {
-                    $url = '../../front_end/usager/DeleteUsager.php?' . http_build_query($result);
-                    header('Location: ' . $url);
-                    exit();
-                }
-            } else {
-                echo 'Aucun utilisateur trouvé.';
-            }
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
-    
-
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++DELETE USER+++++++++++++++++++++++++++++++++++++++++++++++
-
     public function DeleteUsager(){
         try{
             $req = $this->dbconfig->getPDO()->prepare(
@@ -92,7 +60,7 @@ class Usager
             
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++MODIFICATION USER+++++++++++++++++++++++++++++++++++++++++++++++
+
     public function ModifyUsager(){
         try{
             $req = $this->dbconfig->getPDO()->prepare(
@@ -131,51 +99,6 @@ class Usager
         }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
     } 
 
-    public function CheckUsagerExist(){
-        try{
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager WHERE nom = :nom AND prenom = :prenom' );
-
-            $req->execute(array(
-                'prenom' => $this->prenom,
-                'nom' => $this->nom,
-            ));
-
-            $usager = $req->fetch();
-            if($usager){
-                header('Location: ../../front_end/usager/usager.php?nom=' . urlencode($usager['nom']) . '&prenom=' . urlencode($usager['prenom']));
-            }else{
-                header('Location: ../../front_end/index.html');
-            }
-
-        }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
-    }
-
-    public function getUsagerIDByNameAndFristName($nom,$prenom){
-        try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT Id_Usager, nom,prenom FROM usager WHERE nom = :nom AND prenom = :prenom');
-            $req->execute(array(
-                ':prenom' => $prenom,
-                ':nom' => $nom,
-            ));
-            $result = $req->fetchAll(PDO::FETCH_ASSOC);
-    
-            return $result;
-        } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
-
-    public function getAllRdvUsagerByIdUsager($Id_Usager){
-        try {
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM rdv WHERE Id_Usager = :IdUsager');
-            $req->bindValue(':IdUsager', $Id_Usager, PDO::PARAM_INT);
-            $req->execute();
-
-            return $req;
-        } catch (Exception $pe) {
-            echo 'ERREUR : ' . $pe->getMessage();
-        }
-    }
-
-
     // GET USAGER BY ID
     public function getUsagerByID($Id_Usager){
         try {
@@ -191,20 +114,6 @@ class Usager
         }
     }
 
-    public function CheckUsagerExistByNumeroSecuriteSocial($numero_securite_social){
-        try{
-            $req = $this->dbconfig->getPDO()->prepare('SELECT * FROM usager WHERE numero_securite_social = :numero_securite_social' );
-            $req->bindValue(':numero_securite_social', $numero_securite_social, PDO::PARAM_INT);
-            $req->execute();
-            $result = $req->fetch(PDO::FETCH_ASSOC);
-            if($result){
-                return true;
-            }else{
-                return false;
-            }
-
-        }catch(Exception $pe){echo 'ERREUR : ' . $pe->getMessage();}
-    }
     //UTILISER POUR GETALL
     public function getAllUsager(){
         try {
@@ -214,21 +123,6 @@ class Usager
             return $result;
             
         } catch (Exception $pe) {echo 'ERREUR : ' . $pe->getMessage();}
-    }
-
-
-
-    function deliver_response($status_code, $status_message, $data){
-
-        http_response_code($status_code);
-        header("Content-Type:application/json; charset=utf-8");
-        $response['status_code'] = $status_code;
-        $response['status_message'] = $status_message;
-        $response['data'] = $data;
-        $json_response = json_encode($response);
-        if($json_response===false)
-            die('json encode ERROR : '.json_last_error_msg());
-        echo $json_response;
     }
 
     public function idUsagerHasRdv($Id_Usager)
